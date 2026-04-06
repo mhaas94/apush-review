@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APUSH Review — All 9 Periods</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff;
+    --bg2: #f5f5f3;
+    --bg3: #eeede9;
+    --text: #1a1a1a;
+    --text2: #666660;
+    --text3: #999992;
+    --border: rgba(0,0,0,0.12);
+    --border2: rgba(0,0,0,0.22);
+    --blue-bg: #e6f1fb;
+    --blue-text: #0c447c;
+    --blue-mid: #185FA5;
+    --green-bg: #eaf3de;
+    --green-text: #27500a;
+    --red-bg: #fcebeb;
+    --red-text: #791f1f;
+    --amber-bg: #faeeda;
+    --amber-text: #633806;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1a;
+      --bg2: #252523;
+      --bg3: #2e2e2b;
+      --text: #f0efe8;
+      --text2: #aaa89e;
+      --text3: #777770;
+      --border: rgba(255,255,255,0.1);
+      --border2: rgba(255,255,255,0.2);
+      --blue-bg: #0c2d4a;
+      --blue-text: #85b7eb;
+      --blue-mid: #378add;
+      --green-bg: #173404;
+      --green-text: #c0dd97;
+      --red-bg: #501313;
+      --red-text: #f09595;
+      --amber-bg: #412402;
+      --amber-text: #fac775;
+    }
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; }
+  .app { max-width: 960px; margin: 0 auto; padding: 1rem 1rem 4rem; }
+  .header { text-align: center; padding: 2.5rem 1rem 1.5rem; }
+  .header h1 { font-size: 30px; font-weight: 600; letter-spacing: -0.5px; }
+  .header p { color: var(--text2); font-size: 15px; margin-top: 6px; }
+  .nav-tabs { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 1.5rem; padding: 0 0.5rem; }
+  .tab-btn { font-size: 13px; padding: 7px 16px; border-radius: 20px; border: 1px solid var(--border2); background: var(--bg); color: var(--text2); cursor: pointer; font-family: inherit; transition: all 0.15s; }
+  .tab-btn:hover { background: var(--bg2); }
+  .tab-btn.active { background: var(--blue-mid); color: #e6f1fb; border-color: var(--blue-mid); }
+  .section { display: none; } .section.active { display: block; }
+  .period-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+  .period-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1rem 1.25rem; cursor: pointer; transition: all 0.15s; }
+  .period-card:hover { border-color: var(--border2); background: var(--bg2); transform: translateY(-1px); }
+  .period-badge { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 10px; background: var(--blue-bg); color: var(--blue-text); display: inline-block; margin-bottom: 8px; }
+  .period-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .period-card .dates { font-size: 12px; color: var(--text2); }
+  .period-card .summary { font-size: 12px; color: var(--text3); line-height: 1.5; margin-top: 6px; }
+  .period-detail { display: none; } .period-detail.active { display: block; }
+  .detail-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .back-btn { font-size: 13px; padding: 7px 14px; border-radius: var(--radius); border: 1px solid var(--border2); background: var(--bg); color: var(--text2); cursor: pointer; font-family: inherit; transition: all 0.15s; }
+  .back-btn:hover { background: var(--bg2); }
+  #detail-title { font-size: 15px; font-weight: 600; }
+  .content-tabs { display: flex; gap: 4px; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .ctab { font-size: 13px; padding: 9px 16px; border: none; background: none; color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: inherit; transition: all 0.15s; }
+  .ctab:hover { color: var(--text); }
+  .ctab.active { color: var(--blue-mid); border-bottom-color: var(--blue-mid); font-weight: 600; }
+  .ctab-content { display: none; } .ctab-content.active { display: block; }
+  .card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 14px; }
+  .card h3 { font-size: 15px; font-weight: 600; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .key-events { display: flex; flex-direction: column; gap: 8px; }
+  .event-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 12px; background: var(--bg2); border-radius: var(--radius); }
+  .event-year { font-size: 12px; font-weight: 600; color: var(--blue-mid); min-width: 46px; padding-top: 1px; }
+  .event-text { font-size: 13px; line-height: 1.5; }
+  .vocab-item { padding: 10px 14px; background: var(--bg2); border-radius: var(--radius); cursor: pointer; margin-bottom: 8px; border: 1px solid transparent; transition: border-color 0.15s; }
+  .vocab-item:hover { border-color: var(--border2); }
+  .vocab-term { font-size: 13px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+  .vocab-term::after { content: '+'; font-size: 16px; color: var(--text3); font-weight: 400; }
+  .vocab-item.open .vocab-term::after { content: '−'; }
+  .vocab-def { font-size: 13px; color: var(--text2); margin-top: 8px; line-height: 1.6; display: none; }
+  .vocab-def.shown { display: block; }
+  .q-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; }
+  .q-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+  .q-counter { font-size: 12px; color: var(--text2); }
+  .q-score { font-size: 13px; font-weight: 600; color: var(--text2); }
+  .progress-wrap { height: 5px; background: var(--bg2); border-radius: 3px; margin-bottom: 1.25rem; }
+  .progress-fill { height: 100%; border-radius: 3px; background: var(--blue-mid); transition: width 0.3s; }
+  .q-text { font-size: 15px; line-height: 1.65; margin-bottom: 1.25rem; font-weight: 500; }
+  .q-options { display: flex; flex-direction: column; gap: 9px; }
+  .q-opt { padding: 11px 15px; border-radius: var(--radius); border: 1px solid var(--border2); background: var(--bg); cursor: pointer; font-size: 13px; text-align: left; font-family: inherit; color: var(--text); transition: all 0.15s; line-height: 1.5; }
+  .q-opt:hover:not(:disabled) { background: var(--bg2); border-color: var(--blue-mid); }
+  .q-opt.correct { background: var(--green-bg); border-color: #3b6d11; color: var(--green-text); }
+  .q-opt.wrong { background: var(--red-bg); border-color: #a32d2d; color: var(--red-text); }
+  .q-feedback { margin-top: 1rem; padding: 11px 14px; border-radius: var(--radius); font-size: 13px; line-height: 1.6; display: none; }
+  .q-feedback.show { display: block; }
+  .q-feedback.correct-fb { background: var(--green-bg); color: var(--green-text); border: 1px solid #3b6d11; }
+  .q-feedback.wrong-fb { background: var(--red-bg); color: var(--red-text); border: 1px solid #a32d2d; }
+  .q-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; flex-wrap: wrap; gap: 8px; }
+  .btn { font-size: 13px; padding: 8px 16px; border-radius: var(--radius); border: 1px solid var(--border2); background: var(--bg); color: var(--text); cursor: pointer; font-family: inherit; transition: all 0.15s; }
+  .btn:hover { background: var(--bg2); }
+  .btn-primary { background: var(--blue-mid); color: #e6f1fb; border-color: var(--blue-mid); }
+  .btn-primary:hover { opacity: 0.9; background: var(--blue-mid); }
+  .btn-sm { font-size: 11px; padding: 4px 10px; }
+  .step-row { display: flex; gap: 12px; margin-bottom: 12px; }
+  .step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--blue-bg); color: var(--blue-text); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .step-body { font-size: 13px; line-height: 1.65; }
+  .step-body strong { font-weight: 600; }
+  .rubric-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .rubric-table th { padding: 9px 11px; text-align: left; font-weight: 600; background: var(--bg2); border-bottom: 1px solid var(--border); }
+  .rubric-table td { padding: 9px 11px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+  .pt-badge { font-size: 11px; padding: 3px 8px; border-radius: 10px; background: var(--blue-bg); color: var(--blue-text); font-weight: 600; display: inline-block; }
+  .bagpipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .bagpipe-item { padding: 14px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg); }
+  .bagpipe-letter { font-size: 28px; font-weight: 700; color: var(--blue-mid); margin-bottom: 4px; }
+  .bagpipe-name { font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+  .bagpipe-desc { font-size: 12px; color: var(--text2); line-height: 1.55; }
+  .checklist-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border-radius: var(--radius); cursor: pointer; margin-bottom: 4px; transition: background 0.1s; }
+  .checklist-item:hover { background: var(--bg2); }
+  .check-box { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: all 0.15s; }
+  .check-box.done { background: var(--blue-mid); border-color: var(--blue-mid); }
+  .check-mark { width: 10px; height: 7px; border-left: 2px solid white; border-bottom: 2px solid white; transform: rotate(-45deg) translateY(-2px); display: none; }
+  .check-box.done .check-mark { display: block; }
+  .check-label { font-size: 13px; line-height: 1.5; }
+  .check-label.done { text-decoration: line-through; color: var(--text3); }
+  .prompt-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 14px; }
+  .prompt-text { font-size: 15px; font-weight: 600; line-height: 1.6; margin-bottom: 10px; }
+  .prompt-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .prompt-tag { font-size: 11px; padding: 3px 9px; border-radius: 10px; font-weight: 600; }
+  .skill-tag { background: var(--blue-bg); color: var(--blue-text); }
+  .type-tag { background: var(--amber-bg); color: var(--amber-text); }
+  .period-tag { background: var(--green-bg); color: var(--green-text); }
+  .hint-item { font-size: 12px; color: var(--text2); line-height: 1.55; padding: 5px 10px; border-left: 3px solid var(--border2); margin-bottom: 5px; }
+  .filter-row { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 1.25rem; }
+  .filter-btn { font-size: 12px; padding: 5px 12px; border-radius: 14px; border: 1px solid var(--border2); background: var(--bg); color: var(--text2); cursor: pointer; font-family: inherit; transition: all 0.15s; }
+  .filter-btn:hover { background: var(--bg2); }
+  .filter-btn.active { background: var(--blue-mid); color: #e6f1fb; border-color: var(--blue-mid); }
+  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text3); margin-bottom: 10px; }
+  .results-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2.5rem; text-align: center; }
+  .results-score { font-size: 48px; font-weight: 700; margin-bottom: 4px; }
+  .results-pct { font-size: 15px; color: var(--text2); margin-bottom: 8px; }
+  .results-msg { font-size: 14px; margin-bottom: 1.5rem; }
+  .themes-section { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+  .theme-row { display: flex; gap: 10px; align-items: flex-start; }
+  .theme-num { font-size: 11px; background: var(--blue-bg); color: var(--blue-text); padding: 2px 7px; border-radius: 10px; margin-top: 2px; white-space: nowrap; font-weight: 600; }
+  .theme-text { font-size: 13px; line-height: 1.6; }
+  @media (max-width: 600px) {
+    .period-grid { grid-template-columns: 1fr 1fr; }
+    .q-text { font-size: 14px; }
+    .header h1 { font-size: 24px; }
+  }
+  @media (max-width: 420px) {
+    .period-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>APUSH Review</h1>
+    <p>AP U.S. History — All 9 Periods + Writing Tools</p>
+  </div>
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showSection('periods',this)">Periods</button>
+    <button class="tab-btn" onclick="showSection('prompts',this)">Practice Prompts</button>
+    <button class="tab-btn" onclick="showSection('writing',this)">Writing Guide</button>
+    <button class="tab-btn" onclick="showSection('checklists',this)">Checklists</button>
+    <button class="tab-btn" onclick="showSection('themes',this)">BAGPIPE</button>
+    <button class="tab-btn" onclick="showSection('skills',this)">Skills</button>
+  </div>
+  <div id="section-periods" class="section active">
+    <div id="period-list"><div class="period-grid" id="period-cards"></div></div>
+    <div id="period-detail" class="period-detail">
+      <div class="detail-header">
+        <button class="back-btn" onclick="backToPeriods()">← All Periods</button>
+        <span id="detail-title"></span>
+      </div>
+      <div class="content-tabs">
+        <button class="ctab active" onclick="showCtab('overview',this)">Overview</button>
+        <button class="ctab" onclick="showCtab('events',this)">Key Events</button>
+        <button class="ctab" onclick="showCtab('vocab',this)">Vocabulary</button>
+        <button class="ctab" onclick="showCtab('quiz',this)">Quiz (15 Qs)</button>
+      </div>
+      <div id="ctab-overview" class="ctab-content active"></div>
+      <div id="ctab-events" class="ctab-content"></div>
+      <div id="ctab-vocab" class="ctab-content"></div>
+      <div id="ctab-quiz" class="ctab-content"></div>
+    </div>
+  </div>
+  <div id="section-prompts" class="section"><div id="prompts-content"></div></div>
+  <div id="section-writing" class="section"><div id="writing-content"></div></div>
+  <div id="section-checklists" class="section"><div id="checklists-content"></div></div>
+  <div id="section-themes" class="section"><div class="bagpipe-grid" id="bagpipe-content"></div></div>
+  <div id="section-skills" class="section"><div id="skills-content"></div></div>
+</div>
+
+<script>
+const Q=(q,o,a,e)=>({q,opts:o,ans:a,exp:e});
+
+const periods=[
+ {id:1,dates:"1491–1607",title:"Pre-Columbian & Contact",summary:"Native societies, European exploration, and early encounters between worlds.",
+  themes:["Diverse Native American societies shaped by geography and environment","European motives: God, Glory, Gold","Columbian Exchange transformed both hemispheres","Early Spanish, French, and English colonization patterns differ significantly"],
+  events:[{year:"~1000",text:"Norse explorer Leif Eriksson reaches North America at Vinland"},{year:"1492",text:"Columbus lands in the Caribbean, initiating sustained contact between hemispheres"},{year:"1494",text:"Treaty of Tordesillas divides the New World between Spain and Portugal"},{year:"1519",text:"Hernán Cortés begins conquest of the Aztec Empire"},{year:"1521",text:"Fall of Tenochtitlan; Spanish establish New Spain"},{year:"1542",text:"Las Casas publishes condemnation of Spanish treatment of Native Americans"},{year:"1565",text:"St. Augustine, Florida founded — oldest European settlement in North America"},{year:"1587",text:"Lost Colony of Roanoke established by England"}],
+  vocab:[{term:"Columbian Exchange",def:"The transfer of plants, animals, diseases, and ideas between the Americas and Europe/Africa following Columbus's voyages."},{term:"Encomienda System",def:"Spanish labor system granting conquistadors the right to demand labor or tribute from Native peoples."},{term:"Mestizo",def:"Person of mixed European and Native American ancestry in Spanish colonial society."},{term:"Three Sisters",def:"Corn, beans, and squash — the core agricultural crops of many Native societies."},{term:"Casta System",def:"Spanish colonial racial hierarchy determining social status based on racial ancestry."},{term:"Treaty of Tordesillas",def:"1494 agreement dividing newly discovered lands between Spain and Portugal along a set meridian line."}],
+  quiz:[
+   Q("Which of the following best describes the Columbian Exchange?",["A military alliance between Spain and Portugal","The transfer of goods, diseases, and ideas between the Old and New Worlds","The trade route Columbus used to reach Asia","A treaty dividing the Americas between European powers"],1,"The Columbian Exchange refers to the widespread transfer of plants, animals, diseases, culture, and ideas between the Americas and Afro-Eurasia following Columbus's 1492 voyage."),
+   Q("The encomienda system primarily served to:",["Protect Native Americans from abuse","Provide labor for Spanish colonists","Establish trade routes to Asia","Convert Protestants to Catholicism"],1,"The encomienda granted colonizers the right to extract labor from Native peoples, leading to widespread exploitation and population collapse."),
+   Q("Which factor most contributed to the rapid decline of Native American populations after 1492?",["Warfare with European settlers","Forced labor in mines","Epidemic diseases like smallpox","Destruction of agricultural lands"],2,"European diseases — smallpox, measles, influenza — to which Natives had no immunity caused catastrophic population loss estimated at 50–90%."),
+   Q("The Spanish mission system in North America was primarily designed to:",["Exploit mineral wealth","Convert and control Native American populations","Establish trade networks with Asia","Prepare for war with France"],1,"Missions sought to convert Natives to Catholicism, make them loyal Spanish subjects, and extract their labor — serving both religious and imperial goals."),
+   Q("How did Native American societies in the Eastern Woodlands differ from those of the Southwest?",["Eastern societies were nomadic while Southwest societies were sedentary","Eastern societies relied on agriculture less than Southwest Pueblo peoples","Eastern societies were larger and more hierarchical","Eastern societies had no contact with Europeans until the 1700s"],1,"Pueblo peoples built permanent towns relying heavily on agriculture, while many Eastern Woodlands groups combined agriculture with hunting and gathering in less densely settled areas."),
+   Q("Bartolomé de las Casas is significant in this period primarily because he:",["Led the conquest of the Aztecs","Documented and protested Spanish abuse of Native Americans","Established the encomienda system","Negotiated the Treaty of Tordesillas"],1,"Las Casas was one of the earliest and most vocal critics of brutal Native treatment under Spanish colonialism, influencing the New Laws of 1542."),
+   Q("Which European nation established the first permanent settlement in what is now the United States?",["England","France","Portugal","Spain"],3,"Spain established St. Augustine, Florida in 1565 — the oldest continuously occupied European settlement in the present-day United States."),
+   Q("The primary motivation for Spanish conquest of the Americas is best described as:",["Spreading democracy to indigenous peoples","Religious conversion, wealth extraction, and imperial glory","Scientific exploration and mapmaking","Establishing democratic republics"],1,"Spanish conquistadors were driven by the '3 Gs' — God (religious conversion), Glory (status), and Gold (wealth)."),
+   Q("What was the significance of the Treaty of Tordesillas (1494)?",["It ended the Reconquista in Spain","It divided newly discovered lands between Spain and Portugal along a set meridian","It gave England the right to colonize North America","It established the encomienda system"],1,"The treaty split the non-European world between Spain (west) and Portugal (east), attempting to prevent conflict between the two Catholic powers over colonial territories."),
+   Q("Which best describes the variety of Native American societies before European contact?",["All Native societies were nomadic hunter-gatherers","Native societies were largely uniform across the continent","Native societies were highly diverse, shaped by geography and environment","Most Native societies were organized into large centralized empires"],2,"Native North America featured enormous diversity — from complex Mississippian urban societies to nomadic Plains peoples to the agricultural Pueblo communities of the Southwest."),
+   Q("The Columbian Exchange most negatively affected which group?",["European merchants","Spanish colonizers","Native Americans","African traders"],2,"Native Americans suffered catastrophic population decline primarily from epidemic diseases, losing an estimated 50–90% of their population within a century of contact."),
+   Q("How did the Spanish justify their conquest and colonization of the Americas?",["Through secular democratic principles","Through the Reconquista military tradition alone","Through religious arguments that Natives needed Christian salvation","Through purely economic arguments about trade"],2,"The Spanish used the Doctrine of Discovery and papal authority to argue they had a religious duty to bring Christianity to Native peoples, providing moral justification for conquest."),
+   Q("Which was a major consequence of the encomienda system?",["Native populations grew rapidly under Spanish protection","It led to near-extinction of Native labor, prompting importation of enslaved Africans","It successfully converted the entire Native population to Christianity","It created a prosperous middle class of mixed-race mestizos"],1,"As Native populations collapsed under the encomienda, Spanish colonizers increasingly turned to enslaved African labor to sustain their colonial economy."),
+   Q("The Pueblo Revolt of 1680 is best understood as:",["A Spanish-initiated reform of the mission system","A successful Native uprising driving the Spanish from New Mexico for over a decade","A conflict between rival Native tribes","A failed revolt quickly suppressed by Spanish forces"],1,"The Pueblo Revolt was a successful coordinated uprising that drove the Spanish out of New Mexico for 12 years — demonstrating significant Native capacity for resistance."),
+   Q("Which best explains why European diseases spread so rapidly among Native Americans?",["Native Americans had weakened immune systems from poor nutrition","Native Americans lacked prior exposure and had no natural immunity to Old World diseases","European diseases were engineered to target specific populations","Native Americans refused medical treatment from missionaries"],1,"Thousands of years of geographic isolation meant Native peoples had never been exposed to diseases like smallpox or measles, leaving them with devastating vulnerability.")
+  ]},
+ {id:2,dates:"1607–1754",title:"Colonial America",summary:"British colonial establishment, regional differences, and the roots of American identity.",
+  themes:["New England, Middle, and Southern colonies develop distinct societies","Indentured servitude transitions to African chattel slavery","Salutary neglect allows colonial self-governance to develop","Great Awakening creates religious diversity and individualism"],
+  events:[{year:"1607",text:"Jamestown, Virginia founded — first permanent English settlement"},{year:"1619",text:"First enslaved Africans arrive in Virginia; House of Burgesses established"},{year:"1620",text:"Pilgrims arrive at Plymouth; Mayflower Compact signed"},{year:"1630",text:"Puritans establish Massachusetts Bay Colony under John Winthrop"},{year:"1676",text:"Bacon's Rebellion — uprising of poor farmers and indentured servants in Virginia"},{year:"1681",text:"William Penn founds Pennsylvania as a Quaker colony"},{year:"1692",text:"Salem Witch Trials in Massachusetts"},{year:"1730s–40s",text:"Great Awakening sweeps through the colonies with evangelical revivalism"},{year:"1739",text:"Stono Rebellion — largest slave uprising in colonial America"}],
+  vocab:[{term:"Salutary Neglect",def:"Informal British policy allowing colonies to govern themselves with minimal interference, fostering self-governance traditions."},{term:"Headright System",def:"Virginia land grant system awarding 50 acres per person brought to the colony, encouraging immigration."},{term:"Indentured Servitude",def:"Labor system where individuals worked for a set number of years in exchange for passage to the colonies."},{term:"Chattel Slavery",def:"System in which enslaved people are treated as property and enslaved status is inherited by children."},{term:"Great Awakening",def:"Religious revival movement of the 1730s–40s emphasizing personal conversion and challenging church authority."},{term:"Navigation Acts",def:"British laws restricting colonial trade to benefit England's mercantilist economy."}],
+  quiz:[
+   Q("Bacon's Rebellion (1676) is significant primarily because it:",["Led to independence from Britain","Revealed class tensions and accelerated the shift to African slavery","Established the first colonial legislature","Ended conflict with Native Americans in Virginia"],1,"Bacon's Rebellion exposed the danger of a large class of poor, discontented indentured servants. Planters shifted to African slave labor, seen as a more controllable permanent workforce."),
+   Q("The policy of salutary neglect allowed for:",["Increased taxation of the colonies","Greater colonial self-governance and assemblies","Forced religious conformity in the colonies","Expansion of the slave trade"],1,"Under salutary neglect, Britain allowed colonists to largely govern themselves, strengthening colonial assemblies and self-governance habits that later fueled revolutionary ideas."),
+   Q("Which colonial region was most characterized by religious diversity and middle-class merchants?",["New England","The Middle Colonies","The Southern Colonies","The Chesapeake"],1,"The Middle Colonies (NY, NJ, PA, DE) were the most ethnically and religiously diverse, home to Quakers, Dutch Reformed, and other groups, as well as thriving merchant communities."),
+   Q("The Puritan concept of a 'City upon a Hill' expressed the idea that:",["Boston should become the colonial capital","The Massachusetts colony would serve as a moral model for the world","Puritans were superior to other colonists","Church and state should be completely separated"],1,"John Winthrop's phrase meant the Puritan community would be watched as an example of godly society — blending religious mission with a sense of special American destiny."),
+   Q("The Stono Rebellion of 1739 most directly resulted in:",["Improved conditions for enslaved people","Stricter slave codes and increased restrictions on enslaved people","Abolition of the slave trade in South Carolina","Greater political rights for free Black colonists"],1,"In the aftermath of Stono, South Carolina passed harsher slave codes restricting the movement, education, and assembly of enslaved people."),
+   Q("How did the Great Awakening affect colonial society?",["It unified all colonists under one Protestant denomination","It reinforced established church authority","It challenged church authority and encouraged individual religious experience","It had little impact outside New England"],2,"The Great Awakening encouraged emotional, personal religious experience, undermined established church authority, and spread democratic religious ideas — foreshadowing revolutionary thought."),
+   Q("The headright system in Virginia primarily encouraged:",["Religious freedom for settlers","Large-scale immigration by linking land grants to bringing new settlers","Small farmers to purchase land cheaply","English merchants to invest in the colony"],1,"The headright system awarded 50 acres per person brought to Virginia, incentivizing wealthy planters to import indentured servants and enslaved people, concentrating land in elite hands."),
+   Q("Which best explains the transition from indentured servitude to African chattel slavery in the Chesapeake?",["Indentured servants were more expensive than enslaved Africans","Fear of armed, freed indentured servants created demand for a permanent, controllable labor force","England banned indentured servitude after Bacon's Rebellion","Africans were considered better agricultural workers"],1,"After Bacon's Rebellion, planters feared the growing population of freed, armed, discontented ex-servants. Enslaved Africans, as permanent and hereditary property, offered greater long-term control."),
+   Q("The Mayflower Compact (1620) is historically significant because it:",["Established the first elected legislature in the colonies","Was the first written framework for self-government in British North America","Granted religious freedom to all settlers","Established Plymouth as an official English colony"],1,"The Mayflower Compact was the first written agreement for self-governance in the English colonies, establishing the principle that government derives authority from the consent of the governed."),
+   Q("New England colonies differed from Southern colonies most significantly in that:",["New England was more economically prosperous","New England was founded primarily for religious and community purposes rather than economic profit","New England had a larger enslaved population","New England had more conflict with Native Americans"],1,"New England colonies, especially the Puritan Massachusetts Bay Colony, were founded primarily on religious ideals and a desire to create godly communities — distinguishing them from profit-driven Chesapeake and Southern colonies."),
+   Q("The Navigation Acts were designed primarily to:",["Protect colonial merchants from competition","Ensure that colonial trade benefited England's economy under mercantilism","Prevent smuggling of enslaved people","Regulate relations between colonists and Native Americans"],1,"The Navigation Acts required colonial goods to be shipped through England on English ships — ensuring that colonial trade generated wealth for England, a core principle of mercantilist economic theory."),
+   Q("Which best describes the role of religion in early New England colonial life?",["Religion was kept strictly separate from government","Religious conformity was enforced and dissent was punished","Religious diversity was celebrated from the founding","Religion played a minor role compared to economic concerns"],1,"Puritan New England enforced strict religious conformity. Dissenters like Roger Williams and Anne Hutchinson were banished, reflecting the Puritan belief that community covenant with God required unity."),
+   Q("The establishment of the House of Burgesses in 1619 is significant because it:",["Granted full voting rights to all male colonists","Was the first representative legislative assembly in the English colonies","Abolished indentured servitude in Virginia","Established separation of church and state"],1,"The House of Burgesses was the first representative assembly in the English colonies, establishing the precedent of elected self-governance central to colonial political identity."),
+   Q("How did the economy of the Southern colonies differ from that of New England?",["Southern colonies relied on subsistence farms while New England had large plantations","Southern colonies developed plantation agriculture using enslaved labor while New England relied on trade and small farms","New England had a more prosperous economy","Southern colonists were generally more educated and urban"],1,"The Southern colonies developed plantation economies growing tobacco, rice, and indigo using enslaved African labor, while New England's economy centered on trade, fishing, and small family farms."),
+   Q("The Salem Witch Trials of 1692 are best interpreted as evidence of:",["Widespread actual witchcraft practice in Puritan communities","Social tensions, religious anxieties, and the dangers of mass hysteria in a theocratic society","A deliberate political conspiracy by colonial elites","The declining influence of Puritanism in Massachusetts"],1,"The Salem Witch Trials reflected deep social tensions — between established families and newer settlers, between young women and patriarchal authority — amplified by religious anxiety and unstable political conditions.")
+  ]},
+ {id:3,dates:"1754–1800",title:"Revolution & New Nation",summary:"From the French & Indian War through the Constitution and early republic.",
+  themes:["Enlightenment ideas fuel colonial resistance to British taxation","Revolutionary War creates new ideals of liberty — yet slavery persists","Articles of Confederation prove too weak; Constitution creates stronger union","Competing visions of government: Federalists vs. Anti-Federalists"],
+  events:[{year:"1754",text:"French & Indian War begins; Albany Plan of Union proposed by Franklin"},{year:"1763",text:"Treaty of Paris ends war; Proclamation of 1763 limits westward expansion"},{year:"1765",text:"Stamp Act passes; colonial protests — 'no taxation without representation'"},{year:"1770",text:"Boston Massacre inflames colonial opinion"},{year:"1773",text:"Boston Tea Party protests the Tea Act"},{year:"1775",text:"Battles of Lexington and Concord begin the Revolutionary War"},{year:"1776",text:"Declaration of Independence issued, July 4"},{year:"1781",text:"Articles of Confederation ratified; Cornwallis surrenders at Yorktown"},{year:"1787",text:"Constitutional Convention produces new framework of government"},{year:"1789",text:"George Washington inaugurated as first president; Bill of Rights drafted"}],
+  vocab:[{term:"Virtual Representation",def:"British argument that Parliament represented all subjects including colonists, regardless of whether they voted."},{term:"Natural Rights",def:"Enlightenment concept (Locke) that people possess inherent rights to life, liberty, and property that governments cannot take away."},{term:"Articles of Confederation",def:"First U.S. governing document (1781–89); created a weak central government with no taxing power or executive branch."},{term:"Federalists",def:"Supporters of the Constitution who favored a strong central government; argued their case in the Federalist Papers."},{term:"Anti-Federalists",def:"Opponents of the Constitution who feared tyranny and demanded a Bill of Rights to protect individual liberties."},{term:"Three-Fifths Compromise",def:"Constitutional provision counting enslaved people as 3/5 of a person for taxation and representation."}],
+  quiz:[
+   Q("The French and Indian War contributed to the American Revolution primarily by:",["Causing France to attack British colonies","Leaving Britain deeply in debt, leading to new colonial taxes","Increasing Native American power in the West","Convincing Britain to grant colonial self-rule"],1,"The war left Britain deeply indebted, prompting Parliament to tax the colonies. Colonists resisted these taxes as violations of their rights, escalating tensions toward revolution."),
+   Q("The main weakness of the Articles of Confederation was that:",["It gave too much power to the president","It had no provisions for foreign policy","Congress lacked the power to tax or regulate commerce","It allowed states to print their own currency"],2,"Under the Articles, Congress could not levy taxes or regulate interstate commerce, creating economic chaos and inability to pay war debts — key reasons for the Constitutional Convention."),
+   Q("The concept of 'checks and balances' in the Constitution was primarily designed to:",["Ensure equal representation for all states","Prevent any one branch of government from becoming too powerful","Speed up the legislative process","Protect the rights of individual citizens"],1,"Checks and balances distribute power among three branches so each can limit the others, preventing tyranny — reflecting Enlightenment fears of concentrated power."),
+   Q("Which best explains why slavery was not abolished in the Constitution?",["Most Founders believed slavery was morally acceptable","Southern states threatened to refuse to ratify without protections for slavery","The Declaration of Independence had already addressed the issue","Northern states had no economic interest in ending slavery"],1,"The Constitutional Convention was a series of compromises. Southern states refused to join without slavery protections, producing the Three-Fifths Compromise and ban on ending the slave trade before 1808."),
+   Q("The Proclamation of 1763 angered colonists primarily because it:",["Raised taxes without colonial consent","Banned westward expansion beyond the Appalachians","Required colonists to house British soldiers","Abolished colonial assemblies"],1,"After the French & Indian War, Britain prohibited settlement west of the Appalachians to avoid costly conflicts with Native Americans. Colonists who had fought expected access to western lands."),
+   Q("Washington's Farewell Address warned against:",["A standing army and a navy","Permanent foreign alliances and political factions","Westward expansion","A strong executive branch"],1,"Washington warned that permanent foreign entanglements and partisan political parties would destabilize the republic — warnings that shaped early American foreign and domestic policy for decades."),
+   Q("The Declaration of Independence's assertion that 'all men are created equal' was most contradicted by:",["The existence of state governments","The continued practice of slavery","The exclusion of women from voting","Both slavery and the exclusion of women"],3,"The Declaration's ideals directly contradicted both the institution of slavery and the exclusion of women from political participation — tensions that would define American history for generations."),
+   Q("Shays' Rebellion (1786–87) was most significant because it:",["Proved the Articles of Confederation were adequate","Demonstrated the weakness of the Articles and accelerated calls for a new Constitution","Led directly to the Bill of Rights","Showed that democracy was incompatible with stability"],1,"Shays' Rebellion — a Massachusetts farmers' uprising against debt and taxation — alarmed elites who feared the Articles created too weak a central government, energizing the push for the Constitutional Convention."),
+   Q("The Bill of Rights was added to the Constitution primarily to:",["Strengthen the power of the federal government","Address Anti-Federalist concerns about individual liberties","Clarify the rights of states","Define the separation of church and state"],1,"Anti-Federalists refused to support ratification without a Bill of Rights protecting individual liberties from potential federal overreach — a key compromise that secured ratification."),
+   Q("The Great Compromise at the Constitutional Convention resolved the debate over:",["Slavery in new territories","Congressional representation between large and small states","The power of the executive branch","The ratification process for new states"],1,"The Great Compromise created a bicameral legislature: the Senate with equal state representation (favoring small states) and the House based on population (favoring large states)."),
+   Q("The ideology of republicanism shaped the American Revolution primarily by:",["Calling for the abolition of all forms of hierarchy","Emphasizing civic virtue, public service, and the dangers of unchecked power","Supporting a strong monarchy with limited oversight","Treating revolution as primarily an economic struggle"],1,"Republicanism held that self-governance required virtuous citizens willing to sacrifice private interests for the common good, and that concentrated power inevitably led to tyranny."),
+   Q("The Federalist Papers were written primarily to:",["Argue against ratification of the Constitution","Explain and defend the Constitution to skeptical New York voters","Propose amendments to the Articles of Confederation","Justify the American Revolution to European audiences"],1,"Alexander Hamilton, James Madison, and John Jay wrote the Federalist Papers to persuade New York — a key swing state — to ratify the Constitution by explaining the logic behind its structure."),
+   Q("Marbury v. Madison (1803) established the principle of:",["Presidential power to remove judges","Judicial review — the Supreme Court's power to declare laws unconstitutional","Federal supremacy over state laws","Congressional oversight of the executive branch"],1,"Chief Justice John Marshall's ruling established judicial review, giving the Supreme Court the power to strike down laws that violated the Constitution — fundamentally shaping the balance of power."),
+   Q("The XYZ Affair (1797–98) is best understood as an example of:",["American weakness in foreign policy","Diplomatic tensions threatening to pull the young republic into European conflicts","The success of Washington's neutrality policy","Congressional opposition to presidential war powers"],1,"The XYZ Affair — in which French agents demanded bribes from U.S. diplomats — inflamed anti-French sentiment and nearly drew the U.S. into war, demonstrating the vulnerability of the new republic."),
+   Q("The Alien and Sedition Acts (1798) most directly demonstrated:",["The strength of American democracy and free speech","The tension between national security concerns and civil liberties","Bipartisan cooperation in the early republic","The effectiveness of the two-party system"],1,"The Alien and Sedition Acts criminalized criticism of the government and targeted immigrant communities, revealing how quickly the new republic could suppress the very liberties articulated in the Bill of Rights.")
+  ]},
+ {id:4,dates:"1800–1848",title:"Early Republic & Reform",summary:"Market Revolution, Jacksonian democracy, territorial expansion, and reform movements.",
+  themes:["Market Revolution transforms economic and social life","Jacksonian Democracy expands voting rights for white men while excluding others","Manifest Destiny drives westward expansion and conflict","Reform movements — abolitionism, women's rights, temperance — reshape society"],
+  events:[{year:"1803",text:"Louisiana Purchase doubles U.S. territory; Marbury v. Madison establishes judicial review"},{year:"1820",text:"Missouri Compromise temporarily resolves slavery debate"},{year:"1823",text:"Monroe Doctrine asserts U.S. sphere of influence in Western Hemisphere"},{year:"1828",text:"Andrew Jackson elected president; Tariff of Abominations passes"},{year:"1830",text:"Indian Removal Act leads to Trail of Tears"},{year:"1831",text:"Nat Turner's Rebellion; William Lloyd Garrison founds The Liberator"},{year:"1836",text:"Texas independence from Mexico; Battle of the Alamo"},{year:"1848",text:"Seneca Falls Convention; Mexican Cession transfers California to U.S."}],
+  vocab:[{term:"Market Revolution",def:"Transformation of the U.S. economy through industrialization, transportation improvements, and commercial agriculture in the early 1800s."},{term:"Nullification Crisis",def:"1832–33 conflict over South Carolina's attempt to nullify federal tariffs, testing federal supremacy."},{term:"Manifest Destiny",def:"Belief that the United States was divinely ordained to expand across North America to the Pacific Ocean."},{term:"Spoils System",def:"Jackson's practice of rewarding political supporters with government jobs, also called 'rotation in office.'"},{term:"Second Great Awakening",def:"Early 19th-century religious revival that fueled reform movements including abolitionism, temperance, and women's rights."},{term:"Trail of Tears",def:"Forced relocation of Cherokee and other Native peoples from the Southeast to Oklahoma under the Indian Removal Act (1830)."}],
+  quiz:[
+   Q("The Market Revolution primarily transformed American society by:",["Eliminating the plantation economy in the South","Creating a market-based, wage-labor economy linked by transportation networks","Reducing economic inequality between regions","Ending dependence on European manufactured goods"],1,"The Market Revolution shifted the economy from subsistence farming to a commercial, market-oriented economy with new class divisions, gender roles, and transportation networks like canals and railroads."),
+   Q("Andrew Jackson's Indian Removal Act was justified by proponents primarily as:",["A humanitarian effort to protect Native peoples","Necessary for U.S. territorial and economic expansion","A fulfillment of treaty obligations","Protection from European interference"],1,"Supporters argued removal was necessary for expansion, though it was driven by settler land hunger and racial ideology — resulting in the forced deaths of thousands on the Trail of Tears."),
+   Q("The Seneca Falls Convention of 1848 was most directly influenced by:",["The industrial labor movement","Enlightenment ideas and the abolitionist movement","Catholic social teaching","The doctrine of separate spheres"],1,"The women's rights movement drew on Enlightenment natural rights ideals and was closely tied to abolitionism — Elizabeth Cady Stanton drew direct parallels between slavery and the oppression of women."),
+   Q("The Second Great Awakening contributed to reform movements primarily by:",["Encouraging people to accept their social position","Inspiring a sense of personal moral responsibility and perfectibility","Unifying Protestant denominations under one church","Discouraging women from participating in public life"],1,"The Second Great Awakening stressed that individuals could achieve moral perfection through faith and action, giving religious urgency to abolitionism, temperance, and women's rights movements."),
+   Q("The Missouri Compromise of 1820 was significant because it:",["Permanently ended the debate over slavery in the territories","Admitted Missouri as a free state and Maine as a slave state","Drew a geographic line temporarily managing slavery's expansion into Louisiana Territory","Gave Congress power to abolish slavery in existing states"],2,"The Missouri Compromise admitted Missouri as a slave state, Maine as a free state, and drew the 36°30' line — an uneasy truce lasting until the Kansas-Nebraska Act of 1854."),
+   Q("Marbury v. Madison (1803) established the principle of:",["Federal supremacy over state laws","Judicial review — the Supreme Court's power to declare laws unconstitutional","Presidential power to remove judges","Congressional oversight of the executive branch"],1,"Chief Justice Marshall's ruling established judicial review, giving the Supreme Court power to strike down laws that violated the Constitution — fundamentally shaping the balance of power in American government."),
+   Q("The 'cult of domesticity' in the early 19th century primarily served to:",["Give middle-class women greater economic independence","Define women's proper sphere as the home and family, separate from public life","Encourage women to pursue careers in education","Challenge traditional gender roles in American society"],1,"The cult of domesticity idealized middle-class women as moral guardians of the home, assigning them a separate domestic sphere while men occupied the public world of commerce and politics."),
+   Q("The Nullification Crisis of 1832–33 was most significant because it:",["Led to South Carolina leaving the Union","Resulted in a permanent lowering of the tariff","Established the principle that states could not unilaterally nullify federal law","Showed that the federal government was too weak to enforce its laws"],2,"Though resolved by compromise, Jackson's forceful assertion that nullification was treason established that states could not legally override federal law — a precedent tested again in the Civil War."),
+   Q("Which best describes the abolitionist movement's strategy in the 1830s?",["Gradual emancipation through political compromise","Immediate emancipation and moral persuasion through newspapers and speeches","Violent overthrow of the slave system","Working within the Democratic Party to pass anti-slavery legislation"],1,"William Lloyd Garrison's The Liberator and the American Anti-Slavery Society called for immediate emancipation and used moral suasion — religious and ethical arguments — to persuade Americans of slavery's evil."),
+   Q("How did the Erie Canal (1825) transform American society?",["It primarily benefited Southern agricultural exporters","It linked the Great Lakes to New York City, dramatically lowering transport costs and boosting Western settlement","It was quickly made obsolete by railroad technology","It was funded entirely by private investment"],1,"The Erie Canal dramatically reduced transportation costs between the Midwest and East Coast, fueling Western migration, boosting New York City's commercial dominance, and demonstrating the power of internal improvements."),
+   Q("The Monroe Doctrine (1823) primarily asserted that:",["The U.S. would expand its territory into Latin America","The Western Hemisphere was closed to further European colonization and interference","The U.S. would form military alliances with Latin American nations","European nations must repay their war debts to the United States"],1,"The Monroe Doctrine declared the Western Hemisphere off-limits to further European colonization, positioning the U.S. as the dominant power in the Americas — though the U.S. lacked military power to actually enforce it."),
+   Q("Nat Turner's Rebellion of 1831 most directly resulted in:",["Greater freedom for enslaved people in the South","Increased restrictions on enslaved people and heightened Southern fears of slave revolt","A major Congressional debate leading to gradual emancipation","Federal intervention to protect the rights of enslaved people"],1,"Turner's Rebellion, in which enslaved people killed approximately 60 white Virginians, sparked intense fear across the South, leading to stricter slave codes and a hardening of pro-slavery ideology."),
+   Q("The Lowell System is significant in this period because it:",["Created the first labor unions in American history","Demonstrated that manufacturing could be organized on a large industrial scale using young women workers","Proved that slavery was economically inefficient in the North","Led to the first successful strike in American history"],1,"The Lowell textile mills pioneered large-scale industrial manufacturing using young farm women, creating company towns and supervised work — a model that transformed American manufacturing and women's labor."),
+   Q("How did the election of Andrew Jackson in 1828 represent a shift in American democracy?",["It reduced property requirements for voting in all states","It represented the rise of mass political participation and the common white man in politics","It gave women and free Black men the right to vote","It marked the end of partisan political competition"],1,"Jackson's election, supported by mass rallies and party organization, represented the rise of popular democracy among white men — expanding suffrage to non-property owners while excluding women, Native Americans, and enslaved people."),
+   Q("The concept of 'Manifest Destiny' was used to justify all of the following EXCEPT:",["The annexation of Texas","The Mexican-American War","The Indian Removal Act","The purchase of Alaska from Russia"],3,"Manifest Destiny was invoked to justify westward continental expansion at the expense of Mexico and Native peoples. The Alaska purchase (1867) was framed more in terms of strategic and commercial advantage.")
+  ]},
+ {id:5,dates:"1844–1877",title:"Civil War & Reconstruction",summary:"Sectionalism, Civil War, emancipation, and the contested meaning of freedom.",
+  themes:["Slavery's expansion into western territories tears the nation apart","Civil War becomes a 'Second American Revolution' redefining freedom","Emancipation and the 13th/14th/15th Amendments transform citizenship","Reconstruction challenged by Southern resistance and Northern retreat"],
+  events:[{year:"1846",text:"Mexican-American War begins; Wilmot Proviso debates slavery in new territories"},{year:"1850",text:"Compromise of 1850 and Fugitive Slave Act intensify sectional tensions"},{year:"1854",text:"Kansas-Nebraska Act repeals Missouri Compromise; Republican Party founded"},{year:"1857",text:"Dred Scott decision rules African Americans have no citizenship rights"},{year:"1861",text:"Southern states secede; Civil War begins at Fort Sumter"},{year:"1863",text:"Emancipation Proclamation; Battle of Gettysburg turns the war"},{year:"1865",text:"13th Amendment abolishes slavery; Lincoln assassinated; Reconstruction begins"},{year:"1868",text:"14th Amendment grants citizenship; Andrew Johnson impeached"},{year:"1877",text:"Compromise of 1877 ends Reconstruction; federal troops withdrawn from South"}],
+  vocab:[{term:"Popular Sovereignty",def:"Principle allowing residents of a territory to vote on whether to allow slavery."},{term:"Emancipation Proclamation",def:"Lincoln's 1863 executive order freeing enslaved people in Confederate states, transforming the war's purpose."},{term:"Radical Reconstruction",def:"Congressional program (1867) imposing military rule on the South and requiring states to ratify the 14th Amendment."},{term:"Freedmen's Bureau",def:"Federal agency established 1865 to assist formerly enslaved people with education, labor, and legal disputes."},{term:"Black Codes",def:"Post-war Southern laws severely restricting the rights and mobility of freed African Americans."},{term:"Sharecropping",def:"Labor system where freedmen farmed white-owned land in exchange for a crop share, creating cycles of debt."}],
+  quiz:[
+   Q("The Kansas-Nebraska Act (1854) was most significant because it:",["Permanently settled the question of slavery in the territories","Effectively repealed the Missouri Compromise and intensified sectional conflict","Granted statehood to Kansas and Nebraska","Expanded the Compromise of 1850 to new territories"],1,"By allowing popular sovereignty in Kansas and Nebraska — where slavery had been banned by the Missouri Compromise — the act reignited the slavery debate and led to 'Bleeding Kansas' violence."),
+   Q("The Emancipation Proclamation was strategically significant because it:",["Immediately freed all enslaved people in the U.S.","Prevented European powers from supporting the Confederacy","Gave formerly enslaved men the right to vote","Was passed by Congress as a constitutional amendment"],1,"By framing the war as a fight against slavery, the Proclamation made it politically impossible for Britain and France — which had abolished slavery — to recognize or aid the Confederacy."),
+   Q("The end of Reconstruction in 1877 was most directly caused by:",["The complete restoration of Southern loyalty to the Union","A political compromise that removed federal troops from the South","Supreme Court rulings protecting African American rights","The economic success of the Freedmen's Bureau"],1,"The Compromise of 1877 resolved the disputed 1876 election by awarding the presidency to Hayes in exchange for withdrawing federal troops from the South, effectively ending Reconstruction."),
+   Q("The 14th Amendment was most significant because it:",["Gave African American men the right to vote","Abolished slavery throughout the United States","Defined citizenship and guaranteed equal protection under the law","Established the Freedmen's Bureau"],2,"The 14th Amendment defined citizenship for anyone born or naturalized in the U.S., overturning Dred Scott, and guaranteed equal protection — the legal foundation for later civil rights struggles."),
+   Q("Sharecropping after the Civil War is best understood as:",["A fair labor system giving freedmen economic opportunity","A form of economic bondage recreating conditions similar to slavery","A successful federal program to distribute land","A system chosen freely by most formerly enslaved people"],1,"Sharecroppers were trapped in debt cycles, required to purchase supplies from planters at inflated prices, making it nearly impossible to accumulate capital — perpetuating racial and economic inequality."),
+   Q("Which best explains why Reconstruction ultimately failed to achieve racial equality?",["Radical Republicans never had majority support in Congress","The federal government lacked the will to sustain enforcement against Southern resistance","African Americans refused to participate in Reconstruction governments","The 13th Amendment left too many loopholes"],1,"Northern Republicans grew tired of Reconstruction, KKK violence undermined Black political participation, and the federal government ultimately withdrew its enforcement commitment."),
+   Q("The Dred Scott decision (1857) is significant primarily because it:",["Upheld the Missouri Compromise as constitutional","Declared that African Americans had no rights that white Americans were bound to respect","Gave Congress full power to prohibit slavery in the territories","Led directly to the Civil War"],1,"Chief Justice Taney's ruling declared that African Americans were not citizens, had no constitutional rights, and that Congress lacked power to ban slavery in the territories — inflaming sectional tensions enormously."),
+   Q("'Bleeding Kansas' refers to:",["Violent conflict between pro-slavery and anti-slavery settlers in Kansas after the Kansas-Nebraska Act","High casualty rates of the Civil War's Western campaigns","The suffering of Cherokee people on the Trail of Tears","A slave rebellion in Kansas that preceded the Civil War"],0,"After the Kansas-Nebraska Act opened Kansas to popular sovereignty, pro-slavery 'border ruffians' and anti-slavery 'free soilers' engaged in violent conflict — a preview of the coming Civil War."),
+   Q("The Radical Republicans' primary goal during Reconstruction was to:",["Punish the South as harshly as possible for secession","Ensure the political and civil rights of freed people and reshape Southern society","Quickly restore Southern states with minimal conditions","Focus federal resources on Western expansion"],1,"Radical Republicans like Thaddeus Stevens and Charles Sumner believed Reconstruction must guarantee rights for freed people through the 14th and 15th Amendments and military enforcement."),
+   Q("The 13th Amendment (1865) was historically significant because it:",["Gave African American men the right to vote","Guaranteed equal protection under the law","Permanently abolished slavery throughout the United States","Established the Freedmen's Bureau"],2,"The 13th Amendment abolished slavery and involuntary servitude throughout the United States — completing what Lincoln had begun with the Emancipation Proclamation."),
+   Q("John Brown's raid on Harpers Ferry (1859) polarized the nation primarily because:",["It succeeded in starting a massive slave rebellion","Northerners celebrated it as heroic while Southerners saw it as proof of Northern aggression","It led directly to South Carolina's secession","Lincoln publicly endorsed the raid"],1,"Brown's failed raid divided the nation: many Northerners saw Brown as a martyr fighting evil, while Southerners were horrified, seeing the raid as evidence that the North intended to incite slave revolt."),
+   Q("The Compromise of 1850 attempted to resolve sectional tensions by:",["Banning slavery in all new territories","Admitting California as a free state while strengthening the Fugitive Slave Law","Extending the Missouri Compromise line to the Pacific","Allowing each territory to vote on slavery through popular sovereignty"],1,"The Compromise admitted California as free, allowed popular sovereignty in new territories, and passed a strengthened Fugitive Slave Act requiring Northerners to return escaped enslaved people."),
+   Q("Which best describes the experience of African Americans during Reconstruction?",["Reconstruction was a complete failure with no gains for African Americans","African Americans made significant political gains that were later undermined by violence and legal discrimination","African Americans gained permanent political equality lasting through the Gilded Age","African Americans voluntarily withdrew from politics to focus on economic advancement"],1,"During Reconstruction, Black men voted, served in legislatures, and held federal offices. These gains were systematically eroded by Black Codes, KKK violence, and Supreme Court decisions limiting federal enforcement."),
+   Q("The significance of the Battle of Gettysburg (1863) was that it:",["Ended the Civil War by capturing Richmond","Was the turning point that halted the Confederate invasion of the North","Was the first major Union victory of the war","Led directly to the Emancipation Proclamation"],1,"Gettysburg was the high-water mark of Confederate power. Lee's failed invasion and devastating losses meant the Confederacy could no longer realistically hope to win the war by taking it to Northern soil."),
+   Q("The Black Codes passed by Southern states after the Civil War most directly:",["Granted limited political rights to freed people","Attempted to recreate the conditions of slavery through legal restrictions on Black labor and movement","Were immediately struck down by the federal courts","Focused primarily on education and economic regulations"],1,"Black Codes restricted freedpeople's right to travel, work independently, own land, or testify in court — essentially attempting to legally recreate slavery and a key reason Congress took control of Reconstruction from President Johnson.")
+  ]},
+ {id:6,dates:"1865–1898",title:"Gilded Age",summary:"Industrialization, immigration, urbanization, and the rise of big business.",
+  themes:["Industrial capitalism creates massive wealth and inequality","New immigrants reshape urban America","Farmers and workers organize against corporate power","Social Darwinism vs. Social Gospel debate poverty's causes"],
+  events:[{year:"1869",text:"Transcontinental Railroad completed; Knights of Labor founded"},{year:"1876",text:"Battle of Little Bighorn; Alexander Graham Bell patents the telephone"},{year:"1882",text:"Chinese Exclusion Act bars Chinese immigration"},{year:"1886",text:"Haymarket Affair; American Federation of Labor (AFL) founded"},{year:"1887",text:"Dawes Act dismantles tribal lands; Interstate Commerce Act regulates railroads"},{year:"1890",text:"Sherman Antitrust Act; Battle of Wounded Knee; Ghost Dance movement crushed"},{year:"1892",text:"Homestead Strike; Populist Party founded"},{year:"1896",text:"Plessy v. Ferguson establishes 'separate but equal'"}],
+  vocab:[{term:"Social Darwinism",def:"Belief applying Darwin's 'survival of the fittest' to human society, justifying inequality as natural and inevitable."},{term:"Vertical Integration",def:"Strategy of controlling all stages of production — practiced by Carnegie in steel."},{term:"Horizontal Integration",def:"Strategy of monopolizing an industry by absorbing competitors — practiced by Rockefeller in oil."},{term:"Gilded Age",def:"Mark Twain's term for the late 19th century — glittering on the surface, corrupt beneath."},{term:"Populism",def:"Political movement of farmers demanding railroad regulation, graduated income tax, and silver-backed currency."},{term:"New Immigration",def:"Wave of immigrants from Southern and Eastern Europe (Italians, Poles, Jews) arriving in large numbers after 1880."}],
+  quiz:[
+   Q("Which best describes the economic philosophy of Social Darwinism?",["Government should regulate business to protect workers","Natural selection justifies economic inequality and opposes government intervention","Society benefits when wealth is redistributed equally","Religious duty requires helping the poor"],1,"Social Darwinists like Herbert Spencer applied Darwin's evolutionary theory to society, arguing that the wealthy 'survived' because of natural superiority and that helping the poor interfered with natural selection."),
+   Q("The Populist Party platform of the 1890s primarily called for:",["Protective tariffs to help American manufacturers","Government ownership of railroads and a graduated income tax","Restrictions on immigration to protect American workers","Expansion of U.S. territory overseas"],1,"The Populists represented agrarian interests, calling for government control of railroads, a graduated income tax, direct election of senators, and a flexible currency backed by silver."),
+   Q("The significance of Plessy v. Ferguson (1896) was that it:",["Granted African Americans full voting rights","Declared segregation constitutional under 'separate but equal'","Overturned the Black Codes","Extended civil rights protections in the South"],1,"Plessy established the 'separate but equal' doctrine, providing constitutional justification for Jim Crow segregation that would define American race relations until Brown v. Board of Education (1954)."),
+   Q("The Chinese Exclusion Act of 1882 is significant because it:",["Was the first federal law restricting immigration based on race or nationality","Protected Chinese workers from discrimination","Was quickly repealed after protests","Applied equally to all Asian immigrants"],0,"The Chinese Exclusion Act was the first major federal law restricting immigration on racial/national grounds, reflecting racial anxieties and labor competition — a precedent for later restrictive immigration laws."),
+   Q("Andrew Carnegie's 'Gospel of Wealth' argued that:",["Wealthy industrialists had a moral duty to use wealth for public benefit","Workers deserved to share in the profits of industry","Government should redistribute wealth through taxation","Social Darwinism justified doing nothing for the poor"],0,"Carnegie believed the wealthy were stewards of society's surplus capital with a duty to use it for public benefit through philanthropy — justifying inequality while softening it with charitable giving."),
+   Q("The Dawes Act (1887) affected Native Americans primarily by:",["Giving tribal governments greater autonomy","Breaking up tribal lands into individual allotments, weakening tribal identity and resulting in massive land loss","Protecting Native Americans from white settlers","Establishing reservations with permanent boundaries"],1,"The Dawes Act divided communal tribal lands into individual family plots, resulting in the loss of approximately 90 million acres of Native land and devastating tribal communities over the following decades."),
+   Q("The Haymarket Affair of 1886 most damaged:",["The Populist Party's electoral chances","The labor movement's public image by associating it with radicalism and violence","The American Federation of Labor's membership","The federal government's reputation for protecting workers"],1,"A bomb explosion at a labor rally in Chicago, followed by police violence, was blamed on anarchists and union organizers — associating the labor movement with radicalism and setting it back significantly."),
+   Q("The Homestead Strike of 1892 is significant because it:",["Was the first successful labor strike in American history","Demonstrated the power of big business to crush labor organizing with government support","Led to major federal legislation protecting workers","Proved that workers and management could negotiate successfully"],1,"Carnegie Steel's use of Pinkerton agents and state militia to violently break the Homestead Strike showed that industrialists could deploy both private and government force to crush unions."),
+   Q("The 'New Immigration' of the 1880s–1900s differed from earlier immigration primarily in that:",["New immigrants came primarily from Western Europe","New immigrants came from Southern and Eastern Europe, were often Catholic or Jewish, and faced greater discrimination","New immigrants were primarily skilled workers","New immigrants were more easily assimilated into American society"],1,"The New Immigration brought Italians, Poles, Russians, Jews, and others from Southern and Eastern Europe — groups that faced severe discrimination, nativist hostility, and charges of being 'unassimilable.'"),
+   Q("Which best explains why farmers supported the Populist demand for 'free silver'?",["Silver coinage would create inflation, making it easier for farmers to repay debts","Silver was more valuable than gold and would enrich farming communities","The silver standard would strengthen the dollar internationally","Free silver would reduce competition from foreign agricultural producers"],0,"Farmers were crushed by deflation — falling crop prices made it harder to repay fixed debts. Inflating the money supply through free silver would raise prices and make debts easier to repay."),
+   Q("The Interstate Commerce Act (1887) was significant because it:",["Established the first federal agency to regulate a private industry","Broke up the Standard Oil monopoly","Gave labor unions federal legal protection","Prohibited immigration from Eastern Europe"],0,"The Interstate Commerce Act created the Interstate Commerce Commission to regulate railroad rates — the first federal attempt to regulate a private industry, establishing a precedent for Progressive Era regulation."),
+   Q("The Battle of Wounded Knee (1890) marked:",["A major Native American military victory over U.S. forces","The effective end of armed Native American resistance on the Great Plains","The beginning of the Ghost Dance movement","The first use of federal troops against Native Americans"],1,"Wounded Knee, where the U.S. Army massacred approximately 250 Lakota men, women, and children, effectively ended armed resistance on the Plains and marked the tragic conclusion of the Indian Wars."),
+   Q("How did the transcontinental railroad most transform the American economy?",["It primarily benefited Eastern manufacturers at the expense of Western farmers","It created a national market by connecting regions and enabling mass movement of goods and people","It eliminated competition and created a natural monopoly in transportation","It reduced the need for labor in the West"],1,"The transcontinental railroad created a truly national economy by integrating regional markets, enabling mass migration to the West, and allowing Eastern manufacturers to sell to Western markets."),
+   Q("The Sherman Antitrust Act (1890) was significant primarily because:",["It immediately broke up all major monopolies","It established the legal principle that monopolistic practices were illegal, even if initially weakly enforced","It granted workers the right to organize","It regulated railroad rates for the first time"],1,"The Sherman Act established that contracts or combinations in restraint of trade were illegal — but it was initially used more against labor unions than monopolies, and courts interpreted it very narrowly."),
+   Q("Political machines like Tammany Hall were significant because they:",["Were purely corrupt organizations providing nothing to urban residents","Provided real services to immigrants in exchange for votes, despite widespread graft","Were quickly dismantled by Progressive Era reformers","Operated only in the South"],1,"Political machines traded patronage — jobs, housing assistance, legal help — for immigrant votes. They were genuinely corrupt but also provided a social safety net that government did not, making them difficult to dismantle.")
+  ]},
+ {id:7,dates:"1890–1945",title:"Progressivism, WWI & WWII",summary:"Reform era, American world power, Great Depression, and World War II.",
+  themes:["Progressives use government to regulate capitalism and protect citizens","U.S. emerges as a world power through imperialism and WWI","Great Depression challenges laissez-faire economics; New Deal reshapes government","WWII unites the nation but reveals contradictions of freedom at home"],
+  events:[{year:"1898",text:"Spanish-American War; U.S. gains Philippines, Puerto Rico, Guam"},{year:"1906",text:"Pure Food and Drug Act; The Jungle published by Upton Sinclair"},{year:"1913",text:"16th Amendment (income tax); 17th Amendment (direct Senate election) ratified"},{year:"1917",text:"U.S. enters WWI; Espionage Act limits civil liberties"},{year:"1919",text:"Treaty of Versailles; Senate rejects League of Nations; Red Scare begins"},{year:"1920",text:"19th Amendment grants women the right to vote"},{year:"1929",text:"Stock market crash triggers the Great Depression"},{year:"1933",text:"FDR inaugurated; New Deal programs begin (FDIC, CCC, TVA)"},{year:"1941",text:"Pearl Harbor attack; U.S. enters WWII"},{year:"1945",text:"Atomic bombs dropped on Hiroshima and Nagasaki; WWII ends"}],
+  vocab:[{term:"Muckraker",def:"Progressive Era journalist who exposed corruption and social problems (e.g., Upton Sinclair, Ida Tarbell, Jacob Riis)."},{term:"New Deal",def:"FDR's programs (1933–39) addressing the Great Depression through relief, recovery, and reform."},{term:"Isolationism",def:"Policy of avoiding foreign entanglements; dominant in U.S. foreign policy between the World Wars."},{term:"Internment",def:"Forced relocation and imprisonment of Japanese Americans during WWII under Executive Order 9066."},{term:"Harlem Renaissance",def:"1920s cultural flourishing of African American literature, art, and music centered in New York City."},{term:"Keynesian Economics",def:"Theory advocating government spending to stimulate the economy during recessions, underlying the New Deal."}],
+  quiz:[
+   Q("Progressive Era reforms most directly responded to problems created by:",["The aftermath of the Civil War","Industrialization, immigration, and urbanization","World War I","The Great Depression"],1,"Progressivism emerged in response to Gilded Age social problems — dangerous workplaces, corrupt political machines, food safety scandals, and exploitation of workers and immigrants."),
+   Q("The New Deal is best understood as:",["A socialist revolution overthrowing capitalism","A set of reforms preserving capitalism while expanding government's role in the economy","A return to laissez-faire economic principles","A program focused exclusively on helping farmers"],1,"The New Deal reformed and stabilized capitalism by regulating banks, creating relief programs, and establishing a social safety net — fundamentally changing the relationship between government and citizens."),
+   Q("The internment of Japanese Americans during WWII demonstrated that:",["National security can lead to violations of civil liberties","The government effectively protected all citizens equally","Congress exercised oversight over executive power","Public opinion consistently opposed racial discrimination"],0,"Internment showed how wartime fear and racial prejudice could override civil liberties. The Supreme Court upheld it in Korematsu v. U.S. (1944) — a decision later repudiated as a grave injustice."),
+   Q("The U.S. Senate's rejection of the League of Nations reflected:",["A desire for closer ties with European powers","Isolationist sentiment and fears of surrendering U.S. sovereignty","Congressional support for Woodrow Wilson's foreign policy","Opposition only to the Treaty of Versailles terms"],1,"Republican senators feared the League would obligate the U.S. to enter foreign wars without Congressional authority — reflecting deep American isolationism after WWI."),
+   Q("The Harlem Renaissance is best understood as:",["A political movement demanding civil rights legislation","A cultural flowering asserting African American dignity and identity","A program of urban renewal funded by the New Deal","A migration of African Americans from the North to the South"],1,"The Harlem Renaissance was a cultural movement in which Black writers, artists, and musicians like Langston Hughes, Zora Neale Hurston, and Duke Ellington asserted African American identity and challenged racial stereotypes."),
+   Q("The GI Bill (1944) most significantly contributed to post-war America by:",["Funding military expansion during the Cold War","Expanding the middle class through education and housing benefits for veterans","Providing reparations to Japanese American internees","Creating Medicare and Social Security benefits"],1,"The GI Bill funded college education and low-interest home loans for veterans, dramatically expanding the American middle class and fueling suburban growth — though benefits were often denied to Black veterans."),
+   Q("The 16th Amendment (1913) was significant because it:",["Established Prohibition","Gave women the right to vote","Authorized Congress to collect a graduated income tax","Provided for the direct election of senators"],2,"The 16th Amendment authorized a graduated federal income tax — a key Progressive goal for making the wealthy pay proportionally more, redistributing the tax burden from tariffs (which hit consumers) to income."),
+   Q("Theodore Roosevelt's approach to trusts is best described as:",["Complete laissez-faire — no government interference in business","Breaking up all large corporations regardless of behavior","Targeting corporations that abused their power, not bigness itself","Using federal power to nationalize key industries"],2,"Roosevelt distinguished between 'good trusts' (large but not abusive) and 'bad trusts' (monopolistic and harmful to the public), using the Sherman Act selectively — earning his trust-buster reputation."),
+   Q("The Great Migration of African Americans to Northern cities (1910–1940) was primarily caused by:",["Better educational opportunities in the North","A combination of Southern racial violence and Northern industrial job opportunities during WWI","Federal programs encouraging Black relocation","The failure of Reconstruction agricultural programs"],1,"African Americans fled Jim Crow violence and poverty while Northern industries, desperate for labor during WWI, actively recruited Black workers — dramatically changing Northern cities' racial composition."),
+   Q("Which best explains why the United States entered WWI in 1917?",["The U.S. had been allied with Britain and France since 1914","Unrestricted German submarine warfare and the Zimmermann Telegram threatened U.S. interests","The U.S. wanted to prevent Germany from acquiring European colonies","Congress unanimously declared war after the sinking of the Lusitania"],1,"Two key triggers: Germany's unrestricted submarine warfare threatening American lives and commerce, and the Zimmermann Telegram — Germany's proposal to Mexico to attack the U.S. in exchange for lost territories."),
+   Q("The Scopes Trial of 1925 most directly revealed:",["The triumph of science over religion in American schools","Cultural conflicts between modernism and traditional religious values","The federal government's power to enforce educational standards","The decline of Protestant Christianity in the 1920s"],1,"The Scopes Trial dramatized the larger cultural war between urban modernists embracing science and rural traditionalists defending religious fundamentalism — a conflict that continues to echo in American politics."),
+   Q("The Bonus Army march on Washington in 1932 is significant because:",["It succeeded in winning early payment of WWI bonuses","Its violent dispersal by the U.S. Army badly damaged Hoover's presidency","It was the largest labor strike in U.S. history","It led directly to the election of FDR"],1,"When Hoover ordered MacArthur to forcibly disperse WWI veterans peacefully demanding their promised bonuses, burning their camps and injuring marchers, the images devastated Hoover's remaining public support."),
+   Q("The dropping of atomic bombs on Japan (1945) remains controversial primarily because:",["The bombs failed to end the war quickly","Historians debate whether it was necessary or whether it targeted civilian populations disproportionately","The bombs were stolen from Germany","The decision bypassed Congressional approval"],1,"Defenders argue the bombs prevented a costly land invasion. Critics argue Japan was near surrender, the bombs primarily targeted civilians, and the decision may have been partly intended to intimidate the Soviet Union."),
+   Q("The New Deal's agricultural programs were controversial because:",["They raised food prices for struggling urban consumers while paying farmers to reduce production","They benefited only Southern planters rather than all farmers","They violated the Constitution's commerce clause","They were funded entirely by borrowing from foreign banks"],0,"The AAA paid farmers to reduce crop production to raise prices — helping larger commercial farmers but raising food costs for the urban poor during the Depression and displacing tenant farmers and sharecroppers."),
+   Q("American imperialism following the Spanish-American War (1898) differed from earlier U.S. expansion because:",["It was motivated purely by religious missionary goals","It extended U.S. control over overseas territories with people of different cultures and races","It was entirely voluntary on the part of the territories acquired","It focused exclusively on economic rather than strategic interests"],1,"Earlier U.S. expansion absorbed contiguous territory expected to become states. After 1898, the U.S. acquired overseas territories (Philippines, Puerto Rico, Guam) without plans to grant statehood — provoking debates about empire and democracy.")
+  ]},
+ {id:8,dates:"1945–1980",title:"Cold War & Social Change",summary:"Cold War competition, civil rights revolution, Great Society, and Vietnam.",
+  themes:["Cold War shapes domestic and foreign policy for decades","Civil rights movement dismantles legal segregation","Great Society expands government's social welfare role","Vietnam and social upheaval fracture the liberal consensus"],
+  events:[{year:"1947",text:"Truman Doctrine; Marshall Plan to rebuild Europe; Cold War begins"},{year:"1950",text:"Korean War begins; McCarthy Red Scare accelerates"},{year:"1954",text:"Brown v. Board of Education overturns Plessy; McCarthy hearings collapse"},{year:"1955",text:"Montgomery Bus Boycott begins; Rosa Parks refuses to give up her seat"},{year:"1962",text:"Cuban Missile Crisis brings U.S. and USSR to nuclear brink"},{year:"1963",text:"March on Washington; Kennedy assassinated; LBJ becomes president"},{year:"1964",text:"Civil Rights Act; Gulf of Tonkin Resolution escalates Vietnam War"},{year:"1965",text:"Voting Rights Act; Great Society programs (Medicare, Medicaid)"},{year:"1968",text:"MLK and RFK assassinated; Chicago DNC riots; Nixon wins presidency"},{year:"1973",text:"Roe v. Wade; U.S. withdraws from Vietnam; Watergate scandal grows"}],
+  vocab:[{term:"Containment",def:"U.S. Cold War policy (Truman Doctrine) aimed at preventing the spread of communism."},{term:"McCarthyism",def:"Senator McCarthy's campaign of unsubstantiated accusations of communist infiltration in the U.S. government."},{term:"Civil Disobedience",def:"Nonviolent resistance to unjust laws, central to the civil rights movement strategy."},{term:"Great Society",def:"LBJ's domestic programs creating Medicare, Medicaid, and expanding civil rights and education funding."},{term:"Détente",def:"Nixon's policy of easing Cold War tensions through diplomacy with the USSR and China."},{term:"Domino Theory",def:"Belief that if one country fell to communism, neighboring countries would follow — used to justify Vietnam War."}],
+  quiz:[
+   Q("The policy of containment called for:",["Invading countries that adopted communism","Using economic and military aid to prevent the spread of communism","Negotiating peace agreements with the Soviet Union","Building nuclear weapons as a deterrent"],1,"Containment, articulated by George Kennan, proposed using economic aid (Marshall Plan) and military support to prevent communist expansion without direct military confrontation with the USSR."),
+   Q("Brown v. Board of Education (1954) was significant because it:",["Gave voting rights to African Americans","Declared racial segregation in public schools unconstitutional","Integrated the U.S. military","Ended Jim Crow laws throughout the South"],1,"Brown overruled Plessy v. Ferguson by declaring 'separate educational facilities are inherently unequal,' providing the legal foundation for the civil rights movement's broader assault on segregation."),
+   Q("The Vietnam War most damaged the 'credibility gap' because:",["Congress refused to fund the war","Government statements about the war proved misleading or false","American forces suffered no military defeats","The war expanded to China"],1,"As the Pentagon Papers and journalistic coverage revealed, the government consistently misled the public about the war's progress, eroding trust in government and fueling the anti-war movement."),
+   Q("The Cuban Missile Crisis (1962) was significant primarily because:",["It led to the Soviet Union withdrawing from Eastern Europe","It demonstrated that nuclear brinkmanship could be managed through negotiation","It resulted in a U.S. military victory in Cuba","It ended the Cold War rivalry"],1,"The 13-day standoff ended with Soviet missile withdrawal in exchange for a U.S. pledge not to invade Cuba — showing both the terrifying risks of nuclear confrontation and that diplomacy could de-escalate crises."),
+   Q("The Civil Rights Act of 1964 was most significant because it:",["Gave African Americans the right to vote","Prohibited discrimination based on race, color, religion, sex, or national origin","Ended segregation only in public schools","Established affirmative action programs"],1,"The Civil Rights Act banned discrimination in public accommodations and employment — a sweeping expansion of federal civil rights protections that transformed American society."),
+   Q("Nixon's policy of détente represented:",["An attempt to defeat the Soviet Union through military buildup","A pragmatic easing of Cold War tensions through diplomacy with China and the USSR","Abandonment of the containment doctrine","Withdrawal from all foreign military commitments"],1,"Détente accepted Cold War realities and sought to manage superpower rivalry through arms control treaties (SALT I) and Nixon's historic 1972 visit to China — a departure from ideological anti-communism."),
+   Q("The Marshall Plan (1948) was significant primarily because it:",["Created NATO and the Western military alliance","Provided economic aid to rebuild Western Europe, preventing communist expansion","Established the Truman Doctrine of military containment","Ended the Berlin Blockade by forcing Soviet withdrawal"],1,"The Marshall Plan provided approximately $13 billion to rebuild war-devastated Western Europe, stabilizing democratic governments that might otherwise have turned to communism."),
+   Q("McCarthyism damaged American society primarily by:",["Exposing actual Soviet spies in the federal government","Creating a climate of fear that suppressed free speech and destroyed careers through unproven accusations","Strengthening the Democratic Party's commitment to civil liberties","Leading to a major overhaul of U.S. intelligence agencies"],1,"McCarthy's accusations — rarely substantiated — destroyed careers and chilled free speech. The Red Scare showed how fear could be weaponized to suppress dissent and political opposition."),
+   Q("The Freedom Riders of 1961 challenged:",["Segregation in interstate transportation","Voting rights restrictions in the Deep South","Segregation in public schools following Brown","Employment discrimination in federal agencies"],0,"Freedom Riders — interracial groups riding interstate buses into the South — challenged segregation in bus terminals, facing violent mobs and forcing the Kennedy administration to act on civil rights."),
+   Q("The Tet Offensive (1968) was significant because it:",["Was a major military victory for North Vietnam","Destroyed U.S. public confidence in the war by contradicting government claims of progress","Led directly to the U.S. withdrawal from Vietnam","Was quickly repelled with minimal U.S. casualties"],1,"Though militarily repulsed, the Tet Offensive's scope shocked Americans who had been told the U.S. was winning — transforming Walter Cronkite and public opinion against the war."),
+   Q("LBJ's Great Society programs most directly expanded the federal government's role by:",["Reducing spending on military programs to fund domestic needs","Creating Medicare, Medicaid, and expanded education funding as permanent entitlements","Nationalizing the healthcare and education industries","Primarily benefiting Southern white voters"],1,"The Great Society created Medicare and Medicaid, the Elementary and Secondary Education Act, the Voting Rights Act, and environmental legislation — dramatically expanding federal responsibility for social welfare."),
+   Q("The women's liberation movement of the 1960s–70s is best understood as:",["A movement focused exclusively on gaining the right to vote","A broad challenge to gender discrimination in law, the workplace, and culture","A primarily Republican-led political reform initiative","A movement limited to middle-class white women"],1,"The women's liberation movement challenged workplace discrimination (Equal Pay Act, Title IX), reproductive rights (Roe v. Wade), cultural sexism, and gender roles — transforming American law and society."),
+   Q("The Truman Doctrine (1947) committed the United States to:",["Providing economic aid to rebuild Europe","Supporting free peoples resisting communist takeover","Establishing a permanent military alliance with Western Europe","Preventing nuclear proliferation globally"],1,"The Truman Doctrine — prompted by communist threats to Greece and Turkey — committed the U.S. to supporting countries threatened by Soviet expansion, establishing the framework for decades of Cold War foreign policy."),
+   Q("Nixon's 'Southern Strategy' was significant because it:",["Helped integrate Southern schools through federal enforcement","Used racial anxieties to win Southern white voters away from the Democratic Party","Strengthened civil rights enforcement in the South","Failed to win any Southern states for the Republican Party"],1,"Nixon's Southern Strategy used coded racial appeals ('law and order', 'states' rights') to win the white South for Republicans — realigning American politics and defining the parties' geographic bases for decades."),
+   Q("The Voting Rights Act of 1965 addressed the problem of:",["Poll taxes charged to Black voters","Federal literacy tests and other discriminatory barriers to Black voter registration in the South","Racial segregation in voting booths","Violence against Black voters in Northern cities"],1,"The Voting Rights Act banned literacy tests and other devices used to disenfranchise Black voters in the South, authorizing federal oversight of elections — leading to dramatic increases in Black voter registration.")
+  ]},
+ {id:9,dates:"1980–Present",title:"Contemporary America",summary:"Reagan Revolution, globalization, culture wars, and America after 9/11.",
+  themes:["Reagan's conservatism reshapes American politics and economics","Globalization and deindustrialization transform the economy","9/11 reshapes U.S. foreign policy and civil liberties debate","Culture wars over gender, race, and religion define politics"],
+  events:[{year:"1980",text:"Reagan elected; conservative revolution begins"},{year:"1981",text:"Reagan tax cuts (Reaganomics); Cold War buildup intensifies"},{year:"1989",text:"Berlin Wall falls; Cold War effectively ends"},{year:"1991",text:"Persian Gulf War; Soviet Union collapses"},{year:"1994",text:"NAFTA takes effect; Republicans win Congress in 'Contract with America'"},{year:"2001",text:"9/11 terrorist attacks; USA PATRIOT Act; invasion of Afghanistan"},{year:"2003",text:"U.S. invades Iraq based on claims of weapons of mass destruction"},{year:"2008",text:"Financial crisis; Barack Obama elected first African American president"},{year:"2015",text:"Obergefell v. Hodges legalizes same-sex marriage nationwide"}],
+  vocab:[{term:"Reaganomics",def:"Supply-side economic policy of cutting taxes (especially for the wealthy), reducing regulation, and cutting social spending."},{term:"Neoconservatism",def:"Foreign policy ideology favoring active promotion of democracy and U.S. power abroad, influencing the Iraq War."},{term:"Globalization",def:"Integration of world economies through free trade, technology, and movement of capital and labor."},{term:"War on Terror",def:"U.S. military and policy response to 9/11, involving wars in Afghanistan and Iraq and expanded surveillance."},{term:"Deindustrialization",def:"Decline of U.S. manufacturing industries as factories moved overseas, hollowing out industrial cities."},{term:"Culture Wars",def:"Social and political conflicts over values, religion, gender roles, and identity defining American politics since the 1980s."}],
+  quiz:[
+   Q("Reagan's economic program (Reaganomics) was based primarily on:",["Increasing government spending on social programs","Supply-side theory: cutting taxes to stimulate investment and growth","Nationalizing key industries","Strengthening labor unions"],1,"Reaganomics cut top marginal tax rates, reduced government regulation, and cut social programs based on supply-side ('trickle-down') economics — dramatically increasing income inequality while growing the deficit."),
+   Q("The USA PATRIOT Act raised concerns primarily about:",["Government spending on defense","Civil liberties and government surveillance of citizens","Immigration enforcement","Military draft requirements"],1,"The PATRIOT Act vastly expanded government surveillance powers. Critics argued it undermined Fourth Amendment protections against unreasonable search and seizure in the name of national security."),
+   Q("The end of the Cold War in 1991 was most directly signaled by:",["The signing of a peace treaty with the Soviet Union","The collapse of the Soviet Union into independent states","Reagan's military buildup forcing Soviet surrender","China and the USSR forming a democratic alliance"],1,"The Soviet Union officially dissolved in December 1991 as constituent republics declared independence, ending the Cold War that had structured global politics since 1947."),
+   Q("NAFTA (1994) most significantly contributed to:",["Increased manufacturing jobs in the American Midwest","Deindustrialization and outsourcing of American manufacturing jobs","A reduction in immigration from Mexico","Greater U.S. trade with Asian markets"],1,"While NAFTA boosted overall trade and lowered consumer prices, it accelerated the loss of American manufacturing jobs to lower-wage Mexico, contributing to Rust Belt deindustrialization and economic anxieties."),
+   Q("The rise of the Religious Right in the 1980s represented:",["A purely economic conservative movement","Mobilization of evangelical Christians as a political force in the Republican Party","Mainstream Protestant denominations opposing Reagan","The decline of religion in American public life"],1,"The Moral Majority and similar groups mobilized evangelical Christians around abortion, school prayer, and 'family values,' transforming the Republican Party and launching decades of culture war politics."),
+   Q("The 2008 financial crisis most directly resulted from:",["Excessive government spending on social programs","Risky mortgage lending and the collapse of the housing market","Foreign governments dumping U.S. Treasury bonds","The high cost of the Iraq and Afghanistan wars"],1,"The 2008 crisis stemmed from a housing bubble inflated by risky subprime mortgages, deregulated financial instruments, and overleveraged financial institutions — triggering the worst downturn since the Great Depression."),
+   Q("The fall of the Berlin Wall in 1989 is significant because it:",["Was directly caused by a U.S. military operation","Symbolized the collapse of communist regimes in Eastern Europe and the effective end of the Cold War","Led immediately to the Soviet Union's dissolution","Was primarily an economic rather than political event"],1,"The Wall's fall, as East Germans poured through unopposed, symbolized the broader collapse of communist regimes across Eastern Europe — a peaceful revolution marking the effective end of the Cold War."),
+   Q("The Contract with America (1994) is significant because it:",["Was a Democratic Party platform to expand the Great Society","Helped Republicans win control of Congress for the first time in 40 years","Was signed into law by President Clinton as a bipartisan compromise","Primarily focused on foreign policy and defense spending"],1,"Newt Gingrich's Contract with America — promising welfare reform, crime legislation, and term limits — helped Republicans win the House in 1994, ending 40 years of Democratic control and accelerating the conservative revolution."),
+   Q("The Iraq War (2003) was most controversial because:",["The U.S. did not have UN authorization for the invasion","The stated justification — weapons of mass destruction — was not found, and the war destabilized the region","It was the first U.S. war fought without Congressional approval","It led directly to the 2008 financial crisis"],1,"No WMDs were found in Iraq, and the invasion destabilized the country, fueling insurgency and sectarian violence. The war's false premises severely damaged U.S. credibility internationally and at home."),
+   Q("Obergefell v. Hodges (2015) was significant because it:",["Established civil unions for same-sex couples in all states","Declared same-sex marriage a constitutional right under the 14th Amendment","Overturned the Defense of Marriage Act passed by Congress","Was the first Supreme Court ruling on LGBTQ rights"],1,"Obergefell held that the 14th Amendment requires states to license and recognize same-sex marriages — the culmination of a decades-long legal and social movement for LGBTQ equality."),
+   Q("The Clinton impeachment (1998) was significant because:",["It was the first presidential impeachment in American history","It demonstrated the intensification of partisan political conflict in the post-Cold War era","It resulted in Clinton's removal from office","It was based on a foreign policy scandal"],1,"Clinton's impeachment over the Lewinsky affair, though acquitted in the Senate, illustrated the deepening partisan polarization that would define American politics in the decades ahead."),
+   Q("The concept of 'deindustrialization' refers to:",["The decline of agricultural production in rural America","The loss of manufacturing jobs as factories moved to lower-wage countries","The decline of the technology sector in the 1990s","The shift from oil-based to renewable energy production"],1,"Deindustrialization describes the collapse of manufacturing in cities like Detroit, Pittsburgh, and Cleveland as companies moved production overseas, creating the 'Rust Belt' and devastating working-class communities."),
+   Q("How did globalization most affect American workers in this period?",["It primarily benefited all American workers by lowering consumer prices","It created winners (college-educated workers) and losers (manufacturing workers displaced by overseas competition)","It had minimal impact because the U.S. economy was self-sufficient","It primarily affected agricultural rather than industrial workers"],1,"Globalization produced uneven outcomes: professional and knowledge workers often benefited from expanded markets, while manufacturing workers lost jobs to overseas competition — increasing economic inequality."),
+   Q("The election of Barack Obama in 2008 was historically significant because:",["He was the first Democrat elected president since Jimmy Carter","He was the first African American elected president, representing a milestone in a nation founded with slavery","He ran on a platform explicitly focused on reparations for slavery","He won the largest electoral vote total in American history"],1,"Obama's election was a historic milestone — the first African American president in a nation that had enslaved Black people for 250 years and enforced legal segregation until 1965 — though debates about racial progress continued."),
+   Q("The Tea Party movement (2009–2010) was primarily motivated by:",["Opposition to the Iraq War and U.S. foreign policy","Anger over bank bailouts, the stimulus, and the Affordable Care Act, framed as government overreach","Support for a more aggressive foreign policy after 9/11","Desire to expand Social Security and Medicare benefits"],1,"The Tea Party channeled anger at TARP bank bailouts, the stimulus, and the ACA as government overreach and fiscal irresponsibility — energizing the conservative base and helping Republicans win the 2010 midterms.")
+  ]}
+];
+
+const practicePrompts=[
+  {text:"Evaluate the extent to which the American Revolution transformed American society in the period 1775–1800.",skill:"CCOT",type:"DBQ",period:"3",hints:["Consider what changed AND what stayed the same","Think about: women, enslaved people, political structure, religion","Strong thesis acknowledges some transformation while qualifying its limits","Use BAGPIPE themes: Beliefs, Politics, Identity"]},
+  {text:"Evaluate the relative importance of the causes of the Civil War.",skill:"Causation",type:"LEQ",period:"5",hints:["Rank causes from most to least important in your thesis","Causes include: slavery's expansion, sectionalism, economic differences, political failures","Complex thesis: acknowledge secondary causes while defending your primary ranking","Outside evidence: Dred Scott, Bleeding Kansas, Lincoln's election, Uncle Tom's Cabin"]},
+  {text:"Evaluate how the Market Revolution changed the lives of American workers and women in the period 1800–1848.",skill:"CCOT",type:"DBQ",period:"4",hints:["Identify both continuities AND changes for workers AND women","Workers: shift from artisan to wage labor, factory system, early unions","Women: cult of domesticity, Lowell mill girls, reform movements","Thesis must address BOTH groups and BOTH change and continuity"]},
+  {text:"Evaluate the relative importance of causes of population movement to colonial British America in the period 1607–1754.",skill:"Causation",type:"LEQ",period:"2",hints:["Rank causes: religious freedom, economic opportunity, forced migration (slavery), indentured servitude","Consider different groups: Puritans, Scots-Irish, enslaved Africans","Regional differences: New England (religion), Chesapeake (economics), Middle Colonies (diversity)","Strongest argument: economic opportunity as most broadly applicable cause"]},
+  {text:"Evaluate how Native American societies adapted to the presence of European colonists in North America from 1500 to 1754.",skill:"Comparison",type:"LEQ",period:"1",hints:["Non-debatable — 'evaluate how' means describe the ways adaptation happened","Strategies: alliances, trade, military resistance, adoption of European goods","Examples: Pocahontas/Powhatan, Metacom's War, Pueblo Revolt, Iroquois Confederacy","Include both accommodation and resistance — adaptation was complex"]},
+  {text:"Evaluate the extent to which industrialization changed American society in the period 1865–1898.",skill:"CCOT",type:"DBQ",period:"6",hints:["Changes: urbanization, immigration, new class structure, labor movement","Continuities: racial inequality, rural poverty, gender norms in the middle class","Strong thesis: significant change with important continuities","BAGPIPE: Economics, Peopling, Politics, Beliefs (Social Darwinism vs. Social Gospel)"]},
+  {text:"Evaluate the extent to which the New Deal represented a significant turning point in American history.",skill:"CCOT",type:"LEQ",period:"7",hints:["Turning point = major change from what came before","Changes: role of federal government, labor rights, financial regulation, social safety net","Continuities: capitalism preserved, racial exclusion in many programs","Compare to Gilded Age laissez-faire to define what actually changed"]},
+  {text:"Evaluate the relative importance of the causes of American involvement in World War II.",skill:"Causation",type:"LEQ",period:"7",hints:["Causes: Pearl Harbor, rise of fascism, Lend-Lease, breakdown of isolationism","Rank: Pearl Harbor made war politically possible, but U.S. was already moving away from neutrality","Japanese aggression in Asia drew U.S. attention before December 1941","Why did FDR want to help Britain even before formal entry?"]},
+  {text:"Evaluate the extent to which the civil rights movement achieved its goals in the period 1945–1968.",skill:"CCOT",type:"DBQ",period:"8",hints:["Achievements: Brown v. Board, Civil Rights Act 1964, Voting Rights Act 1965","Limits: de facto segregation persisted, economic inequality remained, backlash followed","Compare legal equality vs. social and economic equality","Consider voices within the movement: MLK vs. Malcolm X on goals and methods"]},
+  {text:"Evaluate the extent to which Reagan's presidency represented a significant change in the role of the federal government.",skill:"CCOT",type:"LEQ",period:"9",hints:["Changes: tax cuts, deregulation, reduced domestic spending, anti-union stance","Continuities: deficit actually grew; entitlements like Social Security were protected","Compare to New Deal/Great Society — Reagan explicitly ran against that legacy","Strong thesis: significant rhetorical change with more modest actual change in government size"]}
+];
+
+const dbqChecklist=[{cat:"Pre-Writing",items:["Identify the historical skill (causation, comparison, or CCOT)","Identify the time period and geographic focus","Identify 2–3 BAGPIPE themes relevant to the prompt","Read and annotate all 7 documents","Group documents into 2+ categories that support your thesis","Select 2–4 best documents to source (HAPP)","Brainstorm 3+ pieces of outside evidence"]},{cat:"Thesis",items:["States a defensible, historically specific claim","Addresses ALL parts of the question","Does NOT simply restate the prompt","Establishes a line of reasoning (why/how)","For CCOT: establishes how much change occurred","For causation: ranks causes by relative importance","Is complex-direct or split thesis — not just a bare claim"]},{cat:"Contextualization",items:["Describes broader historical context BEFORE or DURING the time period","Provides at least 3–5 sentences (not just one)","Accurately connects context to the argument","Goes BEYOND naming an event — explains its significance","Is NOT the same as your thesis or inside evidence"]},{cat:"Document Use",items:["Uses at least 3 documents to address the topic (1 pt)","Uses at least 4 documents to support the thesis (2nd pt)","Summarizes each document accurately and relevantly","Analyzes HOW/WHY each doc supports the argument","Avoids just summarizing without connecting to thesis"]},{cat:"Sourcing (HAPP)",items:["Sourced 2 documents minimum (1 sourcing pt)","Attempts to source 4 documents (unicorn pt)","For each: attribute the audience, purpose, or POV","For each: explain HOW this affects the document's content","For each: prove it with specific evidence from the document","Sourcing is tied to your argument — not just a generic statement"]},{cat:"Outside Evidence",items:["Includes at least 1 piece of outside evidence","Outside evidence is SPECIFIC (name, date, law, event)","Outside evidence is relevant to AND supports the argument","Is NOT found in the documents","Is used to ANALYZE, not just listed"]},{cat:"Complexity (Unicorn)",items:["Option 1: Counter-argument in conclusion addresses opposing view","Option 2: Synthesis connects to a different time period or place (VERY specific)","Option 3: Historiography references Zinn, Schweikart, or Great Man/Events theory","Option 4: Correctly uses ALL 7 documents","Option 5: Correctly sources 4 documents using HAPP","Conclusion adds new analytical layer — does not just restate the intro"]}];
+const leqChecklist=[{cat:"Pre-Writing",items:["Identify the historical skill (causation, comparison, or CCOT)","Identify time period and geographic scope","Choose the question you know the MOST about","Brainstorm 10+ outside facts, dates, people, events","Create a t-chart (CCOT) or cause/effect chart","Plan 3 body paragraphs using BAGPIPE themes"]},{cat:"Thesis",items:["Makes a defensible, historically specific claim","Addresses ALL parts of the prompt","Establishes a clear line of reasoning","For causation: ranks relative importance","For CCOT: specifies degree of change","Complex-direct form preferred: 'Although… ultimately…'","Includes categories of analysis (themes/reasons)"]},{cat:"Contextualization",items:["4–5 sentences minimum describing relevant background","Accurately connects broader context to the period","Goes beyond naming an event — explains WHY it matters","Connects context to the argument being made","Describes what was happening BEFORE the time period begins"]},{cat:"Evidence & Analysis",items:["At least 2 specific pieces of evidence (names, dates, events, laws)","Evidence is fully elaborated — not just listed","Uses historical skill language (caused, changed, compared)","Each body paragraph has a clear topic sentence from thesis","Analysis explains HOW evidence supports the argument","At least 4 pieces of evidence for maximum points"]},{cat:"Complexity (Unicorn)",items:["Conclusion goes beyond restating the intro","Option 1: Counter-argument — 'Although X, one might argue Z…'","Option 2: Synthesis — connect to a different time period (VERY specific)","Option 3: Historiography — reference historian perspectives","Option 4: Uses multiple historical skills in one essay","Conclusion is substantive — at least 4–5 sentences"]}];
+const saqChecklist=[{cat:"Every SAQ Part",items:["Complete sentences — no bullet points","Answers ONLY what is asked","Does NOT need a thesis or introduction","Roughly 3–5 sentences per part","Uses specific historical evidence (no vague generalities)"]},{cat:"ACE Method",items:["A — Answer the question clearly in the first sentence","A — Restates the prompt in your own words","C — Cites ONE specific piece of historical evidence","C — Evidence is specific: name, date, law, event, place","E — Explains HOW the evidence proves the answer","E — Directly connects evidence back to the question"]},{cat:"Common Mistakes to Avoid",items:["Do NOT use bullet points","Do NOT just list facts without explaining them","Do NOT write a long introduction — get to the point","Do NOT forget the explain step — citing alone is not enough","Do NOT use vague phrases like 'society changed' — be specific"]}];
+
+let currentPeriod=null,quizState={},checkStates={};
+
+function showSection(name,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('section-'+name).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(name==='writing') renderWriting();
+  if(name==='themes') renderThemes();
+  if(name==='skills') renderSkills();
+  if(name==='prompts') renderPrompts('all');
+  if(name==='checklists') renderChecklists();
+}
+
+function renderPeriodCards(){
+  document.getElementById('period-cards').innerHTML=periods.map(p=>`
+    <div class="period-card" onclick="openPeriod(${p.id})">
+      <span class="period-badge">Period ${p.id}</span>
+      <h3>${p.dates}</h3>
+      <div class="dates">${p.title}</div>
+      <div class="summary">${p.summary.substring(0,90)}...</div>
+    </div>`).join('');
+}
+
+function openPeriod(id){
+  currentPeriod=periods.find(p=>p.id===id);
+  document.getElementById('period-list').style.display='none';
+  document.getElementById('period-detail').classList.add('active');
+  document.getElementById('detail-title').textContent=`Period ${id}: ${currentPeriod.dates} — ${currentPeriod.title}`;
+  document.querySelectorAll('.ctab').forEach((t,i)=>{t.classList.remove('active');if(i===0)t.classList.add('active');});
+  document.querySelectorAll('.ctab-content').forEach((c,i)=>{c.classList.remove('active');if(i===0)c.classList.add('active');});
+  renderOverview();
+}
+
+function backToPeriods(){
+  document.getElementById('period-list').style.display='block';
+  document.getElementById('period-detail').classList.remove('active');
+}
+
+function showCtab(name,btn){
+  document.querySelectorAll('.ctab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.ctab-content').forEach(c=>c.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.getElementById('ctab-'+name).classList.add('active');
+  if(name==='overview') renderOverview();
+  if(name==='events') renderEvents();
+  if(name==='vocab') renderVocab();
+  if(name==='quiz') renderQuiz();
+}
+
+function renderOverview(){
+  const p=currentPeriod;
+  document.getElementById('ctab-overview').innerHTML=`
+    <div class="card">
+      <h3>Period summary</h3>
+      <p style="font-size:14px;line-height:1.7;">${p.summary}</p>
+    </div>
+    <div class="card">
+      <h3>Key themes</h3>
+      <div class="themes-section">${p.themes.map((t,i)=>`<div class="theme-row"><span class="theme-num">${i+1}</span><span class="theme-text">${t}</span></div>`).join('')}</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;">
+      <button class="btn" onclick="showCtab('events',null)">Key events →</button>
+      <button class="btn" onclick="showCtab('vocab',null)">Vocabulary →</button>
+      <button class="btn btn-primary" onclick="showCtab('quiz',null)">Take quiz (15 Qs) →</button>
+    </div>`;
+}
+
+function renderEvents(){
+  document.getElementById('ctab-events').innerHTML=`<div class="key-events">${currentPeriod.events.map(e=>`<div class="event-item"><span class="event-year">${e.year}</span><span class="event-text">${e.text}</span></div>`).join('')}</div>`;
+}
+
+function renderVocab(){
+  document.getElementById('ctab-vocab').innerHTML=`
+    <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">Click a term to reveal its definition.</p>
+    <div>${currentPeriod.vocab.map((v,i)=>`<div class="vocab-item" id="vi-${i}" onclick="toggleVocab(${i})"><div class="vocab-term">${v.term}</div><div class="vocab-def" id="vdef-${i}">${v.def}</div></div>`).join('')}</div>`;
+}
+
+function toggleVocab(i){
+  const def=document.getElementById('vdef-'+i);
+  const item=document.getElementById('vi-'+i);
+  def.classList.toggle('shown');
+  item.classList.toggle('open');
+}
+
+function renderQuiz(){
+  const p=currentPeriod;
+  const key='p'+p.id;
+  if(!quizState[key]) quizState[key]={idx:0,score:0,answered:false};
+  const qs=quizState[key];
+  const q=p.quiz[qs.idx];
+  const pct=Math.round((qs.idx/p.quiz.length)*100);
+  document.getElementById('ctab-quiz').innerHTML=`
+    <div class="q-card">
+      <div class="q-meta">
+        <span class="q-counter">Question ${qs.idx+1} of ${p.quiz.length}</span>
+        <span class="q-score">Score: ${qs.score} / ${p.quiz.length}</span>
+      </div>
+      <div class="progress-wrap"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="q-text">${q.q}</div>
+      <div class="q-options">${q.opts.map((opt,i)=>`<button class="q-opt" id="opt-${i}" onclick="answerQuiz(${i})">${opt}</button>`).join('')}</div>
+      <div class="q-feedback" id="q-feedback"></div>
+      <div class="q-nav">
+        <button class="btn btn-primary" id="q-next-btn" style="display:none;" onclick="nextQuestion()">Next question →</button>
+        <span></span>
+      </div>
+    </div>`;
+}
+
+function answerQuiz(chosen){
+  const p=currentPeriod;const key='p'+p.id;const qs=quizState[key];
+  if(qs.answered) return;
+  qs.answered=true;
+  const q=p.quiz[qs.idx];
+  const correct=q.ans===chosen;
+  if(correct) qs.score++;
+  document.querySelectorAll('.q-opt').forEach((btn,i)=>{
+    btn.disabled=true;
+    if(i===q.ans) btn.classList.add('correct');
+    else if(i===chosen&&!correct) btn.classList.add('wrong');
+  });
+  const fb=document.getElementById('q-feedback');
+  fb.textContent=(correct?'Correct! ':'Incorrect. ')+q.exp;
+  fb.className='q-feedback show '+(correct?'correct-fb':'wrong-fb');
+  document.getElementById('q-next-btn').style.display='inline-block';
+}
+
+function nextQuestion(){
+  const p=currentPeriod;const key='p'+p.id;const qs=quizState[key];
+  qs.idx++;qs.answered=false;
+  if(qs.idx>=p.quiz.length){
+    const pct=Math.round((qs.score/p.quiz.length)*100);
+    document.getElementById('ctab-quiz').innerHTML=`
+      <div class="results-card">
+        <div class="results-score">${qs.score}/${p.quiz.length}</div>
+        <div class="results-pct">${pct}% correct</div>
+        <div class="results-msg">${pct===100?'Perfect score! Outstanding work.':pct>=80?'Excellent — you know this period well.':pct>=60?'Good effort — review the explanations above.':'Keep studying this period and try again.'}</div>
+        <button class="btn btn-primary" onclick="resetQuiz()">Try again</button>
+      </div>`;
+  } else {renderQuiz();}
+}
+
+function resetQuiz(){quizState['p'+currentPeriod.id]={idx:0,score:0,answered:false};renderQuiz();}
+
+function renderPrompts(filter){
+  const filtered=filter==='all'?practicePrompts:practicePrompts.filter(p=>p.skill===filter||p.type===filter);
+  document.getElementById('prompts-content').innerHTML=`
+    <div style="margin-bottom:1.25rem;">
+      <div class="section-label">Filter by skill / type</div>
+      <div class="filter-row">${['all','CCOT','Causation','Comparison','DBQ','LEQ'].map(f=>`<button class="filter-btn${filter===f?' active':''}" onclick="renderPrompts('${f}')">${f}</button>`).join('')}</div>
+    </div>
+    <div>${filtered.map(pr=>`
+      <div class="prompt-box">
+        <div class="prompt-text">${pr.text}</div>
+        <div class="prompt-meta">
+          <span class="prompt-tag skill-tag">${pr.skill}</span>
+          <span class="prompt-tag type-tag">${pr.type}</span>
+          <span class="prompt-tag period-tag">Period ${pr.period}</span>
+        </div>
+        <div class="section-label" style="margin-bottom:8px;">Writing hints</div>
+        <div>${pr.hints.map(h=>`<div class="hint-item">${h}</div>`).join('')}</div>
+      </div>`).join('')}</div>`;
+}
+
+function renderChecklists(){
+  const allLists=[{id:'dbq',title:'DBQ Writing Checklist',pts:'7 points possible',cats:dbqChecklist},{id:'leq',title:'LEQ Writing Checklist',pts:'6 points possible',cats:leqChecklist},{id:'saq',title:'SAQ Writing Checklist',pts:'3 points possible',cats:saqChecklist}];
+  if(!checkStates.dbq){
+    allLists.forEach(l=>{checkStates[l.id]={};l.cats.forEach((cat,ci)=>{cat.items.forEach((_,ii)=>{checkStates[l.id][`${ci}-${ii}`]=false;});});});
+  }
+  const total=s=>Object.keys(s).length;
+  const done=s=>Object.values(s).filter(Boolean).length;
+  document.getElementById('checklists-content').innerHTML=allLists.map(l=>{
+    const t=total(checkStates[l.id]);const d=done(checkStates[l.id]);const pct=t>0?Math.round((d/t)*100):0;
+    return`<div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border);">
+        <div>
+          <div style="font-size:15px;font-weight:600;">${l.title}</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px;">${l.pts} — ${d}/${t} items checked</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span style="font-size:14px;font-weight:600;color:${pct===100?'var(--green-text)':'var(--text2)'};">${pct}%</span>
+          <button class="btn btn-sm" onclick="resetChecklist('${l.id}')">Reset</button>
+        </div>
+      </div>
+      <div class="progress-wrap" style="margin-bottom:1.25rem;"><div class="progress-fill" style="width:${pct}%"></div></div>
+      ${l.cats.map((cat,ci)=>`
+        <div style="margin-bottom:16px;">
+          <div class="section-label">${cat.cat}</div>
+          ${cat.items.map((item,ii)=>`
+            <div class="checklist-item" onclick="toggleCheck('${l.id}',${ci},${ii})">
+              <div class="check-box${checkStates[l.id][ci+'-'+ii]?' done':''}"><div class="check-mark"></div></div>
+              <div class="check-label${checkStates[l.id][ci+'-'+ii]?' done':''}">${item}</div>
+            </div>`).join('')}
+        </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+
+function toggleCheck(l,ci,ii){checkStates[l][`${ci}-${ii}`]=!checkStates[l][`${ci}-${ii}`];renderChecklists();}
+function resetChecklist(l){Object.keys(checkStates[l]).forEach(k=>checkStates[l][k]=false);renderChecklists();}
+
+function renderWriting(){
+  document.getElementById('writing-content').innerHTML=`
+    <div class="card"><h3>The 6-step writing model</h3>
+    ${[["Analyze the prompt","Identify the historical skill (causation, comparison, or CCOT) and 2–3 BAGPIPE themes. For non-debatable 'Evaluate how…' prompts, state claims directly."],["Build your essay chart","T-chart or cause/effect chart. Group DBQ documents into 2 categories. Brainstorm 10+ outside facts, dates, people, and terms."],["Write the introduction","3–5 sentences introducing the subject. Explain what happened before the period (contextualization — the smaller picture)."],["Craft your thesis","Outline sub-topics and state your position. For causation: rank by importance. For CCOT: determine how much change occurred. Make a defensible claim, not a fact."],["Develop body paragraphs","3+ pieces of evidence per sub-topic. Use historical skill language ('changed/stayed the same' or 'caused/resulted in'). Include outside evidence and source 2–4 documents using HAPP."],["Write the conclusion","Summarize, offer counter-arguments or historiography, and connect to other time periods (synthesis). Aim for the complexity 'unicorn' point."]].map(([t,d],i)=>`<div class="step-row"><div class="step-num">${i+1}</div><div class="step-body"><strong>${t}:</strong> ${d}</div></div>`).join('')}
+    </div>
+    <div class="card"><h3>Thesis types</h3>
+    ${[["Direct","A straightforward statement that clearly answers the question.","The precedents Washington set as America's first president greatly benefited the American political system."],["Compound","Proves two related points using 'and.'","Jacksonians portrayed themselves as guardians of American ideals and achieved remarkable success protecting those ideals."],["Complex-direct","Acknowledges counter-evidence using 'although.'","Although Jacksonians believed they were guardians of American ideals, their actions betrayed other priorities and rarely matched their rhetoric."],["Split","Breaks thesis into several categories matching essay structure.","To a large extent Jacksonians were not effective guardians of the Constitution, political democracy, individual liberty, or equality of economic opportunity."]].map(([type,desc,ex])=>`<div style="padding:11px 14px;background:var(--bg2);border-radius:var(--radius);margin-bottom:10px;"><div style="font-size:13px;font-weight:600;margin-bottom:3px;">${type}</div><div style="font-size:12px;color:var(--text2);margin-bottom:8px;">${desc}</div><div style="font-size:13px;font-style:italic;border-left:3px solid var(--border2);padding-left:10px;line-height:1.6;">"${ex}"</div></div>`).join('')}
+    </div>
+    <div class="card"><h3>DBQ scoring rubric — 7 points</h3>
+    <table class="rubric-table"><thead><tr><th>Category</th><th>What earns the point</th><th>Pts</th></tr></thead><tbody>
+    ${[["Thesis","Defensible claim addressing all parts of the question — not just a restatement.","1"],["Contextualization","Accurately connects broader historical content to the smaller picture of the period.","1"],["Evidence (docs)","Uses 3+ docs to address the topic (1 pt); uses 4+ docs to support thesis (1 pt).","2"],["Outside evidence","At least one specific piece of evidence beyond the documents, relevant to the argument.","1"],["Sourcing","Explains how/why POV, purpose, context, or audience is relevant for at least 2 documents.","1"],["Complexity (unicorn)","Counter-argument, synthesis, historiography, all 7 docs used, or 4 documents sourced.","1"]].map(([cat,desc,pts])=>`<tr><td style="font-weight:600;white-space:nowrap;">${cat}</td><td>${desc}</td><td><span class="pt-badge">${pts}</span></td></tr>`).join('')}
+    </tbody></table></div>
+    <div class="card"><h3>LEQ scoring rubric — 6 points</h3>
+    <table class="rubric-table"><thead><tr><th>Category</th><th>What earns the point</th><th>Pts</th></tr></thead><tbody>
+    ${[["Thesis","Clear, defensible claim with a line of reasoning that answers the prompt.","1"],["Contextualization","Describes broader historical context accurately and connects it to the argument.","1"],["Evidence","1 pt: 2+ specific examples. 2 pts: evidence fully supports the stated thesis.","2"],["Analysis & reasoning","Uses the required historical skill (causation, comparison, or CCOT) to frame the argument.","1"],["Complexity (unicorn)","Counter-argument, synthesis, historiography, or use of multiple historical skills.","1"]].map(([cat,desc,pts])=>`<tr><td style="font-weight:600;white-space:nowrap;">${cat}</td><td>${desc}</td><td><span class="pt-badge">${pts}</span></td></tr>`).join('')}
+    </tbody></table></div>
+    <div class="card"><h3>SAQ — the ACE method (3 points)</h3>
+    ${[["A — Answer","Directly answer the question in your first sentence. Restate the prompt in your own words."],["C — Cite evidence","Provide one specific piece of historical evidence (event, person, law, term) that supports your answer."],["E — Explain","Explain how your evidence directly proves your answer. Connect explicitly back to the question."]].map(([t,d],i)=>`<div class="step-row"><div class="step-num" style="background:var(--green-bg);color:var(--green-text);">${["A","C","E"][i]}</div><div class="step-body"><strong>${t}:</strong> ${d}</div></div>`).join('')}
+    </div>
+    <div class="card"><h3>Sourcing documents — HAPP</h3>
+    ${[["Historical context","What events or processes in this document's time period shaped what the author wrote?"],["Audience","Who was this written for, and how does that shape its content and emphasis?"],["Purpose","Why was this document created? What was the author trying to accomplish?"],["Point of view (POV)","How does the author's background, identity, or position shape their perspective?"]].map(([t,d])=>`<div style="padding:11px 14px;background:var(--bg2);border-radius:var(--radius);margin-bottom:10px;"><div style="font-size:13px;font-weight:600;margin-bottom:4px;">${t}</div><div style="font-size:13px;color:var(--text2);line-height:1.55;">${d}</div></div>`).join('')}
+    </div>
+    <div class="card"><h3>The complexity ("unicorn") point</h3>
+    <p style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:12px;">The unicorn point rewards essays that demonstrate genuine analytical complexity. Choose one of these approaches for your conclusion:</p>
+    ${[["Counter-argument","Acknowledge evidence that challenges your thesis, then explain why your argument still holds. Use the 'although' in your complex thesis."],["Synthesis","Connect the historical issue to a different time period or place — be VERY specific. Vague parallels to 'today' do not earn the point."],["Historiography","Explain how different historians would interpret the evidence. Reference Zinn (liberal/social history), Schweikart (conservative), Great Man Theory, or Great Events Theory."],["Use all 7 documents (DBQ)","Correctly use all 7 documents in your argument — not just mention them — to demonstrate comprehensive mastery of the sources."],["Source 4 documents (DBQ)","Correctly attribute HAPP for 4 documents, going beyond the 2 required for the sourcing point."]].map(([t,d])=>`<div style="padding:11px 14px;background:var(--bg2);border-radius:var(--radius);margin-bottom:10px;"><div style="font-size:13px;font-weight:600;margin-bottom:4px;">${t}</div><div style="font-size:13px;color:var(--text2);line-height:1.55;">${d}</div></div>`).join('')}
+    </div>`;
+}
+
+function renderThemes(){
+  const bg=[{l:"B",n:"Beliefs — Culture & Society",d:"How moral, philosophical, and cultural values changed in American history and their effects on society and politics."},{l:"A",n:"America in the World",d:"How U.S. events relate to global developments; military, diplomatic, and economic involvement internationally."},{l:"G",n:"Geography & Environment",d:"How the natural environment shaped institutions and values; how economic changes affected the environment."},{l:"P",n:"Politics & Power",d:"How political and social groups competed for influence over society and government; debates over the role of government."},{l:"I",n:"American & National Identity",d:"How debates over national identity changed over time; how gender, class, ethnic, and regional identities evolved."},{l:"P",n:"Peopling — Migration",d:"Why people migrated to, from, and within North America; how changes in migration patterns affected American life."},{l:"E",n:"Economics — Work, Exchange, Tech",d:"How markets, transportation, and technology affected society; how different labor systems developed and evolved."}];
+  document.getElementById('bagpipe-content').innerHTML=bg.map(b=>`<div class="bagpipe-item"><div class="bagpipe-letter">${b.l}</div><div class="bagpipe-name">${b.n}</div><div class="bagpipe-desc">${b.d}</div></div>`).join('');
+}
+
+function renderSkills(){
+  const sk=[{name:"Historical Causation",type:"Chronological Reasoning",desc:"Compare causes and effects (short-term vs. long-term). Analyze multiple interacting causes. Distinguish coincidence, correlation, and causation. Assess historical contingency."},{name:"Continuity & Change Over Time (CCOT)",type:"Chronological Reasoning",desc:"Analyze historical patterns of continuity and change. Connect patterns of continuity and change to larger historical processes or themes."},{name:"Comparison",type:"Comparison & Contextualization",desc:"Compare related historical developments and processes across place, time, and different societies. Explain and evaluate multiple and differing perspectives on a given historical phenomenon."},{name:"Contextualization",type:"Comparison & Contextualization",desc:"Connect specific historical phenomena, events, or processes to broader regional, national, or global processes occurring at the same time. Connect phenomena to similar historical events across time and place."},{name:"Historical Argumentation",type:"Crafting Arguments from Evidence",desc:"Analyze commonly accepted historical arguments and how they were constructed. Construct convincing interpretations through analysis of disparate, relevant historical evidence. Evaluate and synthesize conflicting evidence."},{name:"Appropriate Use of Historical Evidence",type:"Crafting Arguments from Evidence",desc:"Analyze features of historical evidence such as audience, purpose, point of view, format, argument, limitations, and context. Make supportable inferences and draw appropriate conclusions from evidence."},{name:"Interpretation",type:"Historical Interpretation",desc:"Analyze diverse historical interpretations. Evaluate how historians' perspectives influence their interpretations and how models of historical interpretation change over time."}];
+  const types=[...new Set(sk.map(s=>s.type))];
+  document.getElementById('skills-content').innerHTML=types.map(type=>`
+    <div style="margin-bottom:1.75rem;">
+      <div class="section-label">${type}</div>
+      ${sk.filter(s=>s.type===type).map(s=>`<div style="padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;"><div style="font-size:13px;font-weight:600;margin-bottom:5px;">${s.name}</div><div style="font-size:13px;color:var(--text2);line-height:1.6;">${s.desc}</div></div>`).join('')}
+    </div>`).join('');
+}
+
+renderPeriodCards();
+</script>
+</body>
+</html>
